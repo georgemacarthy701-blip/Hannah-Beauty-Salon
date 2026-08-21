@@ -1,0 +1,20 @@
+- [x] Clean Rebuild Schema
+  - [x] Create `init_clean_schema.sql` migration
+- [x] Server-Side Registration Routing
+  - [x] Create Supabase admin client in `src/utils/supabase/admin.ts`
+  - [x] Create Next.js Route Handler `/api/auth/register` in `src/app/api/auth/register/route.ts`
+  - [x] Refactor client register form `src/app/register/page.tsx`
+- [x] Codebase Schema Alignment
+  - [x] Update actions: `jobs.ts`, `applications.ts`, `reviews.ts`, `inquiries.ts`
+  - [x] Update public views: `/jobs`, `/jobs/[id]`, `/professionals`, `/professionals/[id]`
+  - [x] Update dashboard views: `/dashboard`, `/dashboard/profile`, `/dashboard/jobs`, `/dashboard/jobs/JobsClient.tsx`, `/dashboard/applications`
+  - [x] Update admin view: `/admin`, `/admin/AdminClient.tsx`
+- [x] Build & Verification
+  - [x] Run `npm run build` to verify
+- [x] Admin CMS Dashboard & Moderation Console
+  - [x] Create admin layout shell with responsive sidebar navigation
+  - [x] Protect routes & handle suspended/unauthorized users in middleware
+  - [x] Build overview page `/admin` with metrics cards, recent feeds, and reports inbox
+  - [x] Build job management page `/admin/jobs` with direct admin post forms, edits, and deletes
+  - [x] Build user moderation console `/admin/users` with suspend locks, verification badge awards, and account purging
+  - [x] Add global marketplace settings page `/admin/settings`
