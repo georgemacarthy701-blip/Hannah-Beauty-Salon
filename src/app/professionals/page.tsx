@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/server'
 import { Search, MapPin, Star, UserCheck, Filter, Users } from 'lucide-react'
+import ProfessionalCard from './ProfessionalCard'
 
 export const revalidate = 0
 
@@ -123,75 +124,9 @@ export default async function ProfessionalsPage({ searchParams }: PageProps) {
             <p className="font-semibold text-zinc-600 dark:text-zinc-400">No professionals found matching your filters.</p>
           </div>
         :
-          activeProfs.map((prof: any) => {
-            const profile = prof.profiles || {}
-            return (
-              <Link
-                key={prof.id}
-                href={`/professionals/${prof.user_id || prof.id}`}
-                className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-zinc-200/80 bg-white shadow-sm hover:shadow-md hover:border-emerald-500/50 transition-all dark:border-zinc-800/80 dark:bg-zinc-900/40"
-              >
-                {/* Portfolio Visual Preview */}
-                {profile.portfolio_items?.[0] ? (
-                  /* eslint-disable-next-line @next/next/no-img-element */
-                  <img
-                    src={profile.portfolio_items[0].image_url}
-                    alt={profile.portfolio_items[0].title || 'Portfolio Image'}
-                    className="h-48 w-full object-cover group-hover:scale-[1.01] transition-transform"
-                  />
-                ) : (
-                  <div className="h-48 w-full bg-gradient-to-br from-emerald-500/10 to-teal-500/10 flex items-center justify-center border-b border-zinc-100 dark:border-zinc-800">
-                    <Users className="h-10 w-10 text-emerald-500/30" />
-                  </div>
-                )}
-
-                <div className="p-6 space-y-4">
-                  {/* Public Display Identity details */}
-                  <div className="flex gap-3">
-                    {profile.avatar_cloudinary_url ? (
-                      /* eslint-disable-next-line @next/next/no-img-element */
-                      <img
-                        src={profile.avatar_cloudinary_url}
-                        alt={profile.full_name}
-                        className="h-12 w-12 rounded-full object-cover border-2 border-emerald-500/20"
-                      />
-                    ) : (
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 font-bold dark:bg-emerald-950/30 dark:text-emerald-400">
-                        {profile.full_name?.[0] || 'P'}
-                      </div>
-                    )}
-                    <div>
-                      <h3 className="font-bold text-zinc-900 dark:text-white flex items-center gap-1.5">
-                        {profile.full_name || 'Service Pro'}
-                        <span className="text-xs font-normal text-zinc-500">({profile.age ? `${profile.age} yrs` : 'N/A'})</span>
-                      </h3>
-                      <p className="text-xs text-emerald-500 font-semibold">{prof.title}</p>
-                    </div>
-                  </div>
-
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-3 leading-relaxed">{prof.bio}</p>
-
-                  <div className="flex flex-wrap gap-1.5">
-                    {prof.skills?.map((skill: string) => (
-                      <span key={skill} className="rounded-md bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 text-xs text-zinc-600 dark:text-zinc-300">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="p-6 pt-0 mt-auto border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400 bg-zinc-50/50 dark:bg-zinc-900/10">
-                  <span className="flex items-center gap-1 font-medium">
-                    <MapPin className="h-3.5 w-3.5 text-zinc-400 shrink-0" />
-                    <span className="line-clamp-1">{profile.address ? `${profile.address}, ${profile.city || ''}` : 'Sierra Leone'}</span>
-                  </span>
-                  <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5 text-sm">
-                    Le {prof.hourly_rate}/hr
-                  </span>
-                </div>
-              </Link>
-            )
-          })
+          activeProfs.map((prof: any) => (
+            <ProfessionalCard key={prof.id} prof={prof} />
+          ))
         }
       </div>
     </div>
