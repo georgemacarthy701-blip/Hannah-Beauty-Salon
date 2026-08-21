@@ -53,7 +53,7 @@ export default function ProfessionalCard({ prof }: ProfessionalCardProps) {
         {/* Visual Preview container (clickable to open modal) */}
         <div 
           onClick={handleImageClick}
-          className="relative w-full h-48 md:h-52 overflow-hidden rounded-t-2xl bg-slate-900 group/img"
+          className="relative w-full h-48 md:h-52 overflow-hidden rounded-t-2xl bg-zinc-900 border border-zinc-700/50 group/img"
         >
           {displayImage ? (
             <>
@@ -61,8 +61,9 @@ export default function ProfessionalCard({ prof }: ProfessionalCardProps) {
               <img
                 src={displayImage}
                 alt={profile.full_name || 'Professional Profile'}
-                className="w-full h-full object-cover object-center transition-transform duration-300 group-hover/img:scale-105"
+                className="w-full h-full object-contain object-center transition-transform duration-300 group-hover/img:scale-105"
               />
+              <div className="absolute inset-0 bg-zinc-900/10 pointer-events-none"></div>
               <div className="absolute inset-0 bg-transparent opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
                 <div className="bg-white/90 dark:bg-zinc-900/90 rounded-full p-2.5 shadow-md transform translate-y-2 group-hover/img:translate-y-0 transition-all duration-300">
                   <ZoomIn className="h-4 w-4 text-zinc-700 dark:text-zinc-300" />
