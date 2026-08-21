@@ -14,8 +14,8 @@ export default function ProfessionalCard({ prof }: ProfessionalCardProps) {
   
   const profile = prof.profiles || {}
   
-  // Prefer profile picture/avatar, then fallback to first portfolio item, then null
-  const displayImage = profile.avatar_cloudinary_url || profile.portfolio_items?.[0]?.image_url || null
+  const avatarUrl = profile.avatar_cloudinary_url || profile.avatar_url || profile.image || null
+  const displayImage = avatarUrl || profile.portfolio_items?.[0]?.image_url || null
 
   const handleCardClick = (e: React.MouseEvent) => {
     router.push(`/professionals/${prof.user_id || prof.id}`)
@@ -79,10 +79,10 @@ export default function ProfessionalCard({ prof }: ProfessionalCardProps) {
 
         <div className="p-6 space-y-4">
           <div className="flex gap-3">
-            {profile.avatar_cloudinary_url ? (
+            {avatarUrl ? (
               /* eslint-disable-next-line @next/next/no-img-element */
               <img
-                src={profile.avatar_cloudinary_url}
+                src={avatarUrl}
                 alt={profile.full_name}
                 className="h-12 w-12 rounded-full object-cover border-2 border-emerald-500/20"
               />

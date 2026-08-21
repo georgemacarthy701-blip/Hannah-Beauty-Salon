@@ -95,6 +95,10 @@ export default function RegisterPage() {
       }
       setStep(2)
     } else if (step === 2) {
+      if (uploading) {
+        setError('Please wait for the image upload to complete.')
+        return
+      }
       if (!fullName || !dob || !address || !cityRegion) {
         setError('Please fill out all identity and address fields.')
         return
