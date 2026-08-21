@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { MapPin, Users, X, ZoomIn } from 'lucide-react'
+import { formatImageUrl } from '@/utils/image'
 
 interface ProfessionalCardProps {
   prof: any
@@ -59,7 +60,7 @@ export default function ProfessionalCard({ prof }: ProfessionalCardProps) {
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={displayImage}
+                src={formatImageUrl(displayImage)}
                 alt={profile.full_name || 'Professional Profile'}
                 className="w-full h-full object-contain object-center transition-transform duration-300 group-hover/img:scale-105"
               />
@@ -82,7 +83,7 @@ export default function ProfessionalCard({ prof }: ProfessionalCardProps) {
             {avatarUrl ? (
               /* eslint-disable-next-line @next/next/no-img-element */
               <img
-                src={avatarUrl}
+                src={formatImageUrl(avatarUrl)}
                 alt={profile.full_name}
                 className="h-12 w-12 rounded-full object-cover border-2 border-emerald-500/20"
               />
@@ -134,7 +135,7 @@ export default function ProfessionalCard({ prof }: ProfessionalCardProps) {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={displayImage}
+              src={formatImageUrl(displayImage)}
               alt={profile.full_name || 'High Resolution Display'}
               className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg shadow-2xl mx-auto"
             />

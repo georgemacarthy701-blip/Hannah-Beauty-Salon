@@ -1,6 +1,7 @@
 import InquiryForm from './InquiryForm'
 import ReviewForm from './ReviewForm'
 import { deleteReviewAdmin } from '@/app/actions/admin'
+import { formatImageUrl } from '@/utils/image'
 import { MapPin, Star, Calendar, UserCheck, ArrowLeft, Send, Phone, MessageSquare, ShieldAlert } from 'lucide-react'
 
 import Link from 'next/link'
@@ -86,6 +87,9 @@ export default async function ProfessionalDetailsPage({ params }: PageProps) {
   const totalReviews = activeReviews.length
   const avgRating = totalReviews > 0 ? (activeReviews.reduce((sum: number, r: any) => sum + r.rating, 0) / totalReviews).toFixed(1) : 'N/A'
 
+  const profile = activeProf.profiles || {}
+  const avatarUrl = profile.avatar_cloudinary_url || profile.avatar_url || profile.image || null
+
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 w-full space-y-6">
       <Link href="/professionals" className="inline-flex items-center gap-1.5 text-sm font-semibold text-zinc-500 hover:text-zinc-900 transition-colors">
@@ -99,16 +103,16 @@ export default async function ProfessionalDetailsPage({ params }: PageProps) {
           <div className="rounded-2xl border border-zinc-200/80 bg-white p-6 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900/40 space-y-6">
             <div className="flex flex-col sm:flex-row gap-5 items-start sm:items-center justify-between">
               <div className="flex gap-4 items-center">
-                {activeProf.profiles?.avatar_cloudinary_url ? (
+                {avatarUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={activeProf.profiles.avatar_cloudinary_url}
-                    alt={activeProf.profiles.full_name}
+                    src={formatImageUrl(avatarUrl)}
+                    alt={profile.full_name || 'Professional Profile'}
                     className="h-20 w-20 rounded-full object-cover border-2 border-emerald-500/20"
                   />
                 ) : (
                   <div className="flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 text-3xl font-black dark:bg-emerald-950/30 dark:text-emerald-400">
-                    {activeProf.profiles?.full_name?.[0] || 'P'}
+                    {profile.full_name?.[0] || 'P'}
                   </div>
                 )}
                 <div>
