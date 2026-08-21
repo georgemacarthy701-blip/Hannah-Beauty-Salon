@@ -16,6 +16,7 @@ export async function uploadImage(formData: FormData): Promise<{ url: string; pu
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           folder: 'leonelink',
+          resource_type: 'auto',
         },
         (error, result) => {
           if (error) {

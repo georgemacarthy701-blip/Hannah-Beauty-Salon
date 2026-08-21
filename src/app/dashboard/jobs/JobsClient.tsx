@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createJob, updateJobStatus, updateApplicationStatus } from '@/app/actions/jobs'
-import { Briefcase, Users, Plus, CheckCircle, AlertCircle, Eye, EyeOff, MapPin, Calendar, RefreshCw } from 'lucide-react'
+import { Briefcase, Users, Plus, CheckCircle, AlertCircle, Eye, EyeOff, MapPin, Calendar, RefreshCw, FileText } from 'lucide-react'
 
 interface JobsClientProps {
   companyId: string
@@ -372,6 +372,32 @@ export default function JobsClient({ companyId, initialJobs }: JobsClientProps) 
                                 <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed bg-white dark:bg-zinc-900/30 p-2.5 rounded-lg border border-zinc-100 dark:border-zinc-800">
                                   {app.cover_note || 'No cover note provided.'}
                                 </p>
+                              </div>
+
+                              <div className="space-y-1">
+                                <span className="text-[10px] text-zinc-400 font-semibold block uppercase tracking-wider">CV / Resume Attachment</span>
+                                {app.cv_url ? (
+                                  <div className="flex items-center justify-between rounded-lg bg-emerald-50/50 dark:bg-emerald-950/10 p-3 border border-emerald-500/10">
+                                    <div className="flex items-center gap-2">
+                                      <FileText className="h-4 w-4 text-emerald-500" />
+                                      <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                                        Resume_Attachment.pdf
+                                      </span>
+                                    </div>
+                                    <a
+                                      href={app.cv_url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="rounded bg-emerald-500 hover:bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white shadow-sm transition-colors flex items-center gap-1.5"
+                                    >
+                                      View / Download CV
+                                    </a>
+                                  </div>
+                                ) : (
+                                  <p className="text-xs text-zinc-500 italic bg-zinc-50 dark:bg-zinc-900/30 p-3 rounded-lg border border-zinc-100 dark:border-zinc-800">
+                                    No CV attached.
+                                  </p>
+                                )}
                               </div>
                             </div>
                           )

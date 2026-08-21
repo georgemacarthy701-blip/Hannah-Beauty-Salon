@@ -15,6 +15,7 @@ export async function applyToJob(formData: FormData): Promise<{ success: boolean
 
     const jobId = formData.get('jobId') as string
     const coverNote = formData.get('coverNote') as string
+    const cvUrl = formData.get('cvUrl') as string || null
 
     if (!jobId) {
       return { success: false, error: 'Job ID is required.' }
@@ -38,6 +39,7 @@ export async function applyToJob(formData: FormData): Promise<{ success: boolean
         job_id: jobId,
         professional_id: user.id,
         cover_note: coverNote,
+        cv_url: cvUrl,
         status: 'submitted',
       })
 

@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { applyToJob } from '@/app/actions/applications'
-import { FileText, Send, Loader2 } from 'lucide-react'
+import { uploadImage } from '@/app/actions/media'
+import { FileText, Send, Loader2, Paperclip, Trash2 } from 'lucide-react'
 
 interface ApplyFormProps {
   jobId: string
@@ -17,8 +18,54 @@ export default function ApplyForm({ jobId, isMock }: ApplyFormProps) {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
 
+  // CV/Resume State
+  const [cvFile, setCvFile] = useState<File | null>(null)
+  const [cvUrl, setCvUrl] = useState('')
+  const [uploading, setUploading] = useState(false)
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Limit to 5MB
+    if (file.size > 5 * 1024 * 1024) {
+      setError('File size must be less than 5MB.')
+      return
+    }
+
+    setCvFile(file)
+    setUploading(true)
+    setError(null)
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      const res = await uploadImage(formData)
+      if ('error' in res) {
+        setError(res.error)
+        setCvFile(null)
+      } else {
+        setCvUrl(res.url)
+      }
+    } catch (err: any) {
+      setError(err.message || 'File upload failed.')
+      setCvFile(null)
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  const handleRemoveFile = () => {
+    setCvFile(null)
+    setCvUrl('')
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (uploading) {
+      setError('Please wait for the resume upload to complete.')
+      return
+    }
     setLoading(true)
     setError(null)
 
@@ -26,6 +73,9 @@ export default function ApplyForm({ jobId, isMock }: ApplyFormProps) {
       const formData = new FormData()
       formData.append('jobId', jobId)
       formData.append('coverNote', coverNote)
+      if (cvUrl) {
+        formData.append('cvUrl', cvUrl)
+      }
 
       const res = await applyToJob(formData)
       if (res.success) {
@@ -81,6 +131,54 @@ export default function ApplyForm({ jobId, isMock }: ApplyFormProps) {
             />
           </div>
         </div>
+        {/* Optional CV/Resume Upload */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+            Attach CV / Resume (Optional)
+          </label>
+          
+          <div className="flex items-center gap-3">
+            {!cvFile ? (
+              <label className="flex w-full items-center justify-center gap-2 cursor-pointer rounded-lg border border-dashed border-zinc-300 bg-white px-3 py-4 text-xs font-semibold text-zinc-600 shadow-sm hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+                <Paperclip className="h-4 w-4 text-zinc-400" />
+                Attach PDF, DOC, or DOCX (Max 5MB)
+                <input 
+                  type="file" 
+                  accept=".pdf,.doc,.docx" 
+                  onChange={handleFileChange} 
+                  className="sr-only" 
+                  disabled={loading || uploading} 
+                />
+              </label>
+            ) : (
+              <div className="flex items-center justify-between rounded-lg border border-zinc-200 bg-zinc-50 p-2.5 dark:border-zinc-800 dark:bg-zinc-900/60 w-full">
+                <div className="flex items-center gap-2 overflow-hidden">
+                  <FileText className="h-4 w-4 text-emerald-500 shrink-0" />
+                  <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300 truncate">
+                    {cvFile.name}
+                  </span>
+                  <span className="text-[10px] text-zinc-400">
+                    ({(cvFile.size / 1024 / 1024).toFixed(2)} MB)
+                  </span>
+                </div>
+                
+                {uploading ? (
+                  <Loader2 className="h-4 w-4 animate-spin text-emerald-500" />
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleRemoveFile}
+                    className="text-zinc-400 hover:text-rose-500 p-1 rounded transition-colors"
+                    title="Remove attachment"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
         {isMock && (
           <p className="text-xs text-amber-500">
             * Note: This is a demo listing. Submitting will save the application if Database has equivalent entries.
@@ -88,7 +186,7 @@ export default function ApplyForm({ jobId, isMock }: ApplyFormProps) {
         )}
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || uploading}
           className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 py-3 text-sm font-semibold text-white shadow-md transition-colors disabled:opacity-50"
         >
           {loading ? (
