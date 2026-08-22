@@ -45,7 +45,10 @@ export default async function DashboardJobsPage() {
 
     const mappedApps = (applications || []).map(app => {
       const profile = (app as any).profiles || {}
-      const profDetails = profile.professional_details?.[0] || {}
+      let profDetails = profile.professional_details || {}
+      if (Array.isArray(profDetails)) {
+        profDetails = profDetails[0] || {}
+      }
       return {
         ...app,
         professional_details: {

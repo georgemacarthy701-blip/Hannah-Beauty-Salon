@@ -175,7 +175,10 @@ export default async function DashboardHubPage() {
           </>
         ) : (
           <>
-            <div className="rounded-2xl border border-zinc-200/80 bg-white p-6 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900/40 flex items-center gap-4">
+            <Link
+              href="/dashboard/jobs"
+              className="rounded-2xl border border-zinc-200/80 bg-white p-6 shadow-sm hover:shadow-md hover:border-emerald-500/50 transition-all dark:border-zinc-800/80 dark:bg-zinc-900/40 flex items-center gap-4 cursor-pointer w-full text-left"
+            >
               <div className="rounded-xl bg-blue-50 dark:bg-blue-950/30 p-3 text-blue-500">
                 <Briefcase className="h-6 w-6" />
               </div>
@@ -183,9 +186,12 @@ export default async function DashboardHubPage() {
                 <span className="text-xs text-zinc-500 dark:text-zinc-400 font-semibold block uppercase tracking-wider">Active Job Posts</span>
                 <strong className="text-lg font-bold text-zinc-900 dark:text-white">{jobsCount} Jobs</strong>
               </div>
-            </div>
+            </Link>
 
-            <div className="rounded-2xl border border-zinc-200/80 bg-white p-6 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900/40 flex items-center gap-4">
+            <Link
+              href="/dashboard/jobs"
+              className="rounded-2xl border border-zinc-200/80 bg-white p-6 shadow-sm hover:shadow-md hover:border-emerald-500/50 transition-all dark:border-zinc-800/80 dark:bg-zinc-900/40 flex items-center gap-4 cursor-pointer w-full text-left"
+            >
               <div className="rounded-xl bg-amber-50 dark:bg-amber-950/30 p-3 text-amber-500">
                 <Users className="h-6 w-6" />
               </div>
@@ -193,7 +199,7 @@ export default async function DashboardHubPage() {
                 <span className="text-xs text-zinc-500 dark:text-zinc-400 font-semibold block uppercase tracking-wider">Applications Received</span>
                 <strong className="text-lg font-bold text-zinc-900 dark:text-white">{appCount} Applicants</strong>
               </div>
-            </div>
+            </Link>
           </>
         )}
       </div>
@@ -273,14 +279,22 @@ export default async function DashboardHubPage() {
                 >
                   <div className="flex justify-between items-start gap-2">
                     <h4 className="font-bold">{notif.title}</h4>
-                    {!notif.read_at && (
-                      <form action={markNotificationRead as any}>
-                        <input type="hidden" name="notificationId" value={notif.id} />
-                        <button type="submit" className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold hover:underline">
-                          Mark read
-                        </button>
-                      </form>
-                    )}
+                    <div className="flex items-center gap-2">
+                      <Link 
+                        href={role === 'company' ? '/dashboard/jobs' : '/dashboard/applications'}
+                        className="text-[10px] text-zinc-400 hover:text-emerald-500 font-bold hover:underline transition-colors shrink-0"
+                      >
+                        View details
+                      </Link>
+                      {!notif.read_at && (
+                        <form action={markNotificationRead as any} className="inline">
+                          <input type="hidden" name="notificationId" value={notif.id} />
+                          <button type="submit" className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold hover:underline">
+                            Mark read
+                          </button>
+                        </form>
+                      )}
+                    </div>
                   </div>
                   <p className="leading-relaxed">{notif.message}</p>
                   <span className="text-[9px] text-zinc-400 block pt-1 border-t border-zinc-100 dark:border-zinc-800">
