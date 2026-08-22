@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/server'
 import { Search, Briefcase, Users, ArrowRight, MapPin, DollarSign, Calendar, Star } from 'lucide-react'
+import { formatImageUrl } from '@/utils/image'
 
 // Allow page to refresh on navigation
 export const revalidate = 0
@@ -8,13 +9,22 @@ export const revalidate = 0
 export default async function HomePage() {
   const supabase = await createClient()
 
-  // Fetch active jobs (limit 6)
-  const { data: rawJobs } = await supabase
-    .from('jobs')
-    .select('id, title, description, category, location_address, budget, created_at, company_profile:profiles!jobs_company_id_fkey(full_name, avatar_cloudinary_url)')
-    .eq('status', 'open')
-    .order('created_at', { ascending: false })
-    .limit(6)
+  // Fetch both jobs and professionals in parallel to prevent query waterfalls
+  const [jobsResult, profsResult] = await Promise.all([
+    supabase
+      .from('jobs')
+      .select('id, title, description, category, location_address, budget, created_at, company_profile:profiles!jobs_company_id_fkey(full_name, avatar_cloudinary_url)')
+      .eq('status', 'open')
+      .order('created_at', { ascending: false })
+      .limit(6),
+    supabase
+      .from('professional_details')
+      .select('id, title, bio, hourly_rate, skills, availability, profiles(full_name, age, address, city, avatar_cloudinary_url, portfolio_items(id, image_url, title))')
+      .limit(6)
+  ])
+
+  const rawJobs = jobsResult.data
+  const rawProfs = profsResult.data
 
   const jobs = (rawJobs || []).map(j => {
     const profile = (j as any).company_profile || {}
@@ -26,12 +36,6 @@ export default async function HomePage() {
       }
     }
   })
-
-  // Fetch service professionals with profiles and portfolio items (limit 6)
-  const { data: rawProfs } = await supabase
-    .from('professional_details')
-    .select('id, title, bio, hourly_rate, skills, availability, profiles(full_name, age, address, city, avatar_cloudinary_url, portfolio_items(id, image_url, title))')
-    .limit(6)
 
   const professionals = (rawProfs || []).map(p => {
     const profile = (Array.isArray(p.profiles) ? p.profiles[0] : p.profiles) as any || {}
@@ -171,7 +175,7 @@ export default async function HomePage() {
                   {job.company_details?.logo_cloudinary_url ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={job.company_details.logo_cloudinary_url}
+                      src={formatImageUrl(job.company_details.logo_cloudinary_url, { width: 80, height: 80, crop: 'fill' })}
                       alt={job.company_details.company_name}
                       className="h-10 w-10 rounded-lg object-cover border border-zinc-100 dark:border-zinc-800"
                     />
@@ -229,7 +233,7 @@ export default async function HomePage() {
                 {prof.portfolio_items?.[0] ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={prof.portfolio_items[0].image_url}
+                    src={formatImageUrl(prof.portfolio_items[0].image_url, { width: 600, height: 400, crop: 'fill' })}
                     alt={prof.portfolio_items[0].title || 'Portfolio'}
                     className="h-44 w-full object-cover group-hover:scale-[1.01] transition-transform"
                   />
@@ -245,7 +249,7 @@ export default async function HomePage() {
                     {profile.avatar_cloudinary_url ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={profile.avatar_cloudinary_url}
+                        src={formatImageUrl(profile.avatar_cloudinary_url, { width: 96, height: 96, crop: 'fill' })}
                         alt={profile.full_name}
                         className="h-12 w-12 rounded-full object-cover border-2 border-emerald-500/20"
                       />

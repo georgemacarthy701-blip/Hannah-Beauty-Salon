@@ -106,7 +106,7 @@ export default async function ProfessionalDetailsPage({ params }: PageProps) {
                 {avatarUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={formatImageUrl(avatarUrl)}
+                    src={formatImageUrl(avatarUrl, { width: 200, height: 200, crop: 'fill' })}
                     alt={profile.full_name || 'Professional Profile'}
                     className="h-20 w-20 rounded-full object-cover border-2 border-emerald-500/20"
                   />

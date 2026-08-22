@@ -2,7 +2,13 @@
  * Utility helper to format image URLs.
  * Automatically handles HEIC format conversion and compression optimization via Cloudinary.
  */
-export function formatImageUrl(url: string | null | undefined): string {
+export interface ImageOptions {
+  width?: number
+  height?: number
+  crop?: string
+}
+
+export function formatImageUrl(url: string | null | undefined, options?: ImageOptions): string {
   if (!url) return ''
   
   if (url.includes('res.cloudinary.com')) {
@@ -13,9 +19,17 @@ export function formatImageUrl(url: string | null | undefined): string {
       cleanUrl = url.substring(0, url.lastIndexOf('.')) + '.jpg'
     }
     
-    // Inject f_auto,q_auto transformations for optimal compression and format selection
+    // Build transformation string
+    let transformations = 'f_auto,q_auto'
+    if (options) {
+      if (options.width) transformations += `,w_${options.width}`
+      if (options.height) transformations += `,h_${options.height}`
+      if (options.crop) transformations += `,c_${options.crop}`
+    }
+    
+    // Inject transformations for optimal compression and format selection
     if (!cleanUrl.includes('/upload/f_auto')) {
-      cleanUrl = cleanUrl.replace('/upload/', '/upload/f_auto,q_auto/')
+      cleanUrl = cleanUrl.replace('/upload/', `/upload/${transformations}/`)
     }
     
     return cleanUrl

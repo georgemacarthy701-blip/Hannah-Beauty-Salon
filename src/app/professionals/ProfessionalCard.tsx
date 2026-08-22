@@ -60,7 +60,7 @@ export default function ProfessionalCard({ prof }: ProfessionalCardProps) {
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={formatImageUrl(displayImage)}
+                src={formatImageUrl(displayImage, { width: 600, height: 400, crop: 'fill' })}
                 alt={profile.full_name || 'Professional Profile'}
                 className="w-full h-full object-contain object-center transition-transform duration-300 group-hover/img:scale-105"
               />
@@ -83,7 +83,7 @@ export default function ProfessionalCard({ prof }: ProfessionalCardProps) {
             {avatarUrl ? (
               /* eslint-disable-next-line @next/next/no-img-element */
               <img
-                src={formatImageUrl(avatarUrl)}
+                src={formatImageUrl(avatarUrl, { width: 96, height: 96, crop: 'fill' })}
                 alt={profile.full_name}
                 className="h-12 w-12 rounded-full object-cover border-2 border-emerald-500/20"
               />
