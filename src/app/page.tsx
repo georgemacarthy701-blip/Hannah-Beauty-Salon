@@ -26,6 +26,8 @@ export default async function HomePage() {
   const rawJobs = jobsResult.data
   const rawProfs = profsResult.data
 
+  console.log('HOMEPAGE_PROFILES:', { count: rawProfs?.length, error: profsResult.error })
+
   const jobs = (rawJobs || []).map(j => {
     const profile = (j as any).company_profile || {}
     return {

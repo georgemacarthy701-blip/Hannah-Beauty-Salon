@@ -43,7 +43,8 @@ CREATE TABLE public.professional_details (
     bio TEXT NOT NULL DEFAULT '',
     skills TEXT[] NOT NULL DEFAULT '{}'::TEXT[],
     hourly_rate NUMERIC(12, 2) NOT NULL DEFAULT 0.00,
-    experience_years INT NOT NULL DEFAULT 0
+    experience_years INT NOT NULL DEFAULT 0,
+    availability BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 -- 3. Company Details Table
