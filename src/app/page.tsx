@@ -46,75 +46,8 @@ export default async function HomePage() {
     }
   })
 
-  // Standard high-fidelity mock data fallback for immediate visual wow and testing
-  const fallbackJobs = [
-    {
-      id: 'mock-job-1',
-      title: 'Solar Panel Maintenance Technician',
-      category: 'Engineering',
-      location_address: 'Aberdeen, Freetown',
-      budget: 800,
-      created_at: new Date().toISOString(),
-      company_details: {
-        company_name: 'Solon Leone Energy',
-        logo_cloudinary_url: 'https://res.cloudinary.com/demo/image/upload/v1652345767/docs/demo_image2.jpg',
-      },
-    },
-    {
-      id: 'mock-job-2',
-      title: 'Emergency Commercial Electrical Wiring',
-      category: 'Electrical Work',
-      location_address: 'Kongo Town, Freetown',
-      budget: 1200,
-      created_at: new Date(Date.now() - 3600000 * 3).toISOString(),
-      company_details: {
-        company_name: 'Sierra Build Corporation',
-        logo_cloudinary_url: 'https://res.cloudinary.com/demo/image/upload/v1652345767/docs/demo_image3.jpg',
-      },
-    },
-  ]
-
-  const fallbackProfessionals = [
-    {
-      id: 'mock-prof-1',
-      title: 'Senior Plumber & Pipefitter',
-      bio: 'Over 8 years experience servicing residential and commercial plumbing networks across Freetown. Fast emergency response and leak repairs.',
-      hourly_rate: 150,
-      skills: ['Leak Detection', 'Pipe Installation', 'Water Pumps'],
-      availability: true,
-      profiles: {
-        full_name: 'Abu Bakarr Kamara',
-        age: 32,
-        address: '24 Wilkinson Road',
-        city: 'Freetown, Western Area',
-        avatar_cloudinary_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120',
-      },
-      portfolio_items: [
-        { id: 'p1', image_url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=300' }
-      ]
-    },
-    {
-      id: 'mock-prof-2',
-      title: 'Full-Stack Software Developer',
-      bio: 'Building responsive Next.js apps, database design, and mobile-friendly layouts. Available for freelance and contracts.',
-      hourly_rate: 350,
-      skills: ['Next.js', 'PostgreSQL', 'Tailwind CSS'],
-      availability: true,
-      profiles: {
-        full_name: 'Mariama Sall',
-        age: 26,
-        address: '15 Campbell Street',
-        city: 'Bo, Southern Province',
-        avatar_cloudinary_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120',
-      },
-      portfolio_items: [
-        { id: 'p2', image_url: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=300' }
-      ]
-    }
-  ]
-
-  const activeJobs = jobs && jobs.length > 0 ? jobs : fallbackJobs
-  const activeProfs = professionals && professionals.length > 0 ? professionals : fallbackProfessionals
+  const activeJobs = jobs || []
+  const activeProfs = professionals || []
 
   return (
     <div className="flex flex-col gap-16 py-8">
@@ -165,47 +98,55 @@ export default async function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {activeJobs.map((job: any) => (
-            <div
-              key={job.id}
-              className="flex flex-col justify-between p-6 rounded-2xl border border-zinc-200/80 bg-white shadow-sm hover:shadow-md transition-all dark:border-zinc-800/80 dark:bg-zinc-900/40"
-            >
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  {job.company_details?.logo_cloudinary_url ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={formatImageUrl(job.company_details.logo_cloudinary_url, { width: 80, height: 80, crop: 'fill' })}
-                      alt={job.company_details.company_name}
-                      className="h-10 w-10 rounded-lg object-cover border border-zinc-100 dark:border-zinc-800"
-                    />
-                  ) : (
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 font-bold dark:bg-emerald-950/30 dark:text-emerald-400">
-                      {job.company_details?.company_name?.[0] || 'C'}
+          {activeJobs.length === 0 ? (
+            <div className="md:col-span-3 text-center py-12 rounded-2xl border border-dashed border-zinc-300 dark:border-zinc-800 w-full">
+              <Briefcase className="h-10 w-10 mx-auto text-zinc-400 mb-2" />
+              <p className="font-semibold text-zinc-600 dark:text-zinc-400">No active job openings listed yet. Check back soon!</p>
+            </div>
+          ) : (
+            activeJobs.map((job: any) => (
+              <Link
+                key={job.id}
+                href={`/jobs/${job.id}`}
+                className="group flex flex-col justify-between p-6 rounded-2xl border border-zinc-200/80 bg-white shadow-sm hover:shadow-md hover:border-emerald-500/50 transition-all dark:border-zinc-800/80 dark:bg-zinc-900/40 cursor-pointer"
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    {job.company_details?.logo_cloudinary_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={formatImageUrl(job.company_details.logo_cloudinary_url, { width: 80, height: 80, crop: 'fill' })}
+                        alt={job.company_details.company_name}
+                        className="h-10 w-10 rounded-lg object-cover border border-zinc-100 dark:border-zinc-800"
+                      />
+                    ) : (
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 font-bold dark:bg-emerald-950/30 dark:text-emerald-400">
+                        {job.company_details?.company_name?.[0] || 'C'}
+                      </div>
+                    )}
+                    <div>
+                      <h4 className="font-semibold text-xs text-zinc-500 dark:text-zinc-400">{job.company_details?.company_name || 'Anonymous'}</h4>
                     </div>
-                  )}
-                  <div>
-                    <h4 className="font-semibold text-xs text-zinc-500 dark:text-zinc-400">{job.company_details?.company_name || 'Anonymous'}</h4>
+                  </div>
+
+                  <div className="space-y-1">
+                    <h3 className="font-bold text-lg text-zinc-900 dark:text-white line-clamp-1 group-hover:text-emerald-500 transition-colors">{job.title}</h3>
+                    <p className="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-2">{job.description}</p>
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <h3 className="font-bold text-lg text-zinc-900 dark:text-white line-clamp-1">{job.title}</h3>
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-2">{job.description}</p>
+                <div className="mt-6 pt-4 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
+                  <span className="flex items-center gap-1">
+                    <MapPin className="h-3.5 w-3.5 text-zinc-400" />
+                    {job.location_address}
+                  </span>
+                  <span className="font-semibold text-emerald-500">
+                    {job.budget > 0 ? `Le ${job.budget}` : 'Negotiable'}
+                  </span>
                 </div>
-              </div>
-
-              <div className="mt-6 pt-4 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
-                <span className="flex items-center gap-1">
-                  <MapPin className="h-3.5 w-3.5 text-zinc-400" />
-                  {job.location_address}
-                </span>
-                <span className="font-semibold text-emerald-500">
-                  {job.budget > 0 ? `Le ${job.budget}` : 'Negotiable'}
-                </span>
-              </div>
-            </div>
-          ))}
+              </Link>
+            ))
+          )}
         </div>
       </section>
 
@@ -222,74 +163,82 @@ export default async function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {activeProfs.map((prof: any) => {
-            const profile = prof.profiles || {}
-            return (
-              <div
-                key={prof.id}
-                className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-zinc-200/80 bg-white shadow-sm hover:shadow-md transition-all dark:border-zinc-800/80 dark:bg-zinc-900/40"
-              >
-                {/* Visual Portfolio Preview */}
-                {prof.portfolio_items?.[0] ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={formatImageUrl(prof.portfolio_items[0].image_url, { width: 600, height: 400, crop: 'fill' })}
-                    alt={prof.portfolio_items[0].title || 'Portfolio'}
-                    className="h-44 w-full object-cover group-hover:scale-[1.01] transition-transform"
-                  />
-                ) : (
-                  <div className="h-44 w-full bg-gradient-to-br from-emerald-500/10 to-teal-500/10 flex items-center justify-center border-b border-zinc-100 dark:border-zinc-800">
-                    <Users className="h-8 w-8 text-emerald-500/40" />
-                  </div>
-                )}
+          {activeProfs.length === 0 ? (
+            <div className="md:col-span-3 text-center py-12 rounded-2xl border border-dashed border-zinc-300 dark:border-zinc-800 w-full">
+              <Users className="h-10 w-10 mx-auto text-zinc-400 mb-2" />
+              <p className="font-semibold text-zinc-600 dark:text-zinc-400">No service providers listed yet. Be the first to join!</p>
+            </div>
+          ) : (
+            activeProfs.map((prof: any) => {
+              const profile = prof.profiles || {}
+              return (
+                <Link
+                  key={prof.id}
+                  href={`/professionals/${prof.user_id || prof.id}`}
+                  className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-zinc-200/80 bg-white shadow-sm hover:shadow-md hover:border-emerald-500/50 transition-all dark:border-zinc-800/80 dark:bg-zinc-900/40 cursor-pointer"
+                >
+                  {/* Visual Portfolio Preview */}
+                  {prof.portfolio_items?.[0] ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={formatImageUrl(prof.portfolio_items[0].image_url, { width: 600, height: 400, crop: 'fill' })}
+                      alt={prof.portfolio_items[0].title || 'Portfolio'}
+                      className="h-44 w-full object-cover group-hover:scale-[1.01] transition-transform"
+                    />
+                  ) : (
+                    <div className="h-44 w-full bg-gradient-to-br from-emerald-500/10 to-teal-500/10 flex items-center justify-center border-b border-zinc-100 dark:border-zinc-800">
+                      <Users className="h-8 w-8 text-emerald-500/40" />
+                    </div>
+                  )}
 
-                <div className="p-6 space-y-4">
-                  {/* Public Display Identity Info */}
-                  <div className="flex gap-3">
-                    {profile.avatar_cloudinary_url ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={formatImageUrl(profile.avatar_cloudinary_url, { width: 96, height: 96, crop: 'fill' })}
-                        alt={profile.full_name}
-                        className="h-12 w-12 rounded-full object-cover border-2 border-emerald-500/20"
-                      />
-                    ) : (
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 font-bold dark:bg-emerald-950/30 dark:text-emerald-400">
-                        {profile.full_name?.[0] || 'P'}
+                  <div className="p-6 space-y-4">
+                    {/* Public Display Identity Info */}
+                    <div className="flex gap-3">
+                      {profile.avatar_cloudinary_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={formatImageUrl(profile.avatar_cloudinary_url, { width: 96, height: 96, crop: 'fill' })}
+                          alt={profile.full_name}
+                          className="h-12 w-12 rounded-full object-cover border-2 border-emerald-500/20"
+                        />
+                      ) : (
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 font-bold dark:bg-emerald-950/30 dark:text-emerald-400">
+                          {profile.full_name?.[0] || 'P'}
+                        </div>
+                      )}
+                      <div>
+                        <h3 className="font-bold text-zinc-900 dark:text-white flex items-center gap-1.5 group-hover:text-emerald-500 transition-colors">
+                          {profile.full_name || 'Service Pro'}
+                          <span className="text-xs font-normal text-zinc-500">({profile.age ? `${profile.age} yrs` : 'N/A'})</span>
+                        </h3>
+                        <p className="text-xs text-emerald-500 font-semibold">{prof.title}</p>
                       </div>
-                    )}
-                    <div>
-                      <h3 className="font-bold text-zinc-900 dark:text-white flex items-center gap-1.5">
-                        {profile.full_name || 'Service Pro'}
-                        <span className="text-xs font-normal text-zinc-500">({profile.age ? `${profile.age} yrs` : 'N/A'})</span>
-                      </h3>
-                      <p className="text-xs text-emerald-500 font-semibold">{prof.title}</p>
+                    </div>
+
+                    <p className="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-3">{prof.bio}</p>
+
+                    <div className="flex flex-wrap gap-1.5">
+                      {prof.skills?.slice(0, 3).map((skill: string) => (
+                        <span key={skill} className="rounded-md bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 text-xs text-zinc-600 dark:text-zinc-300">
+                          {skill}
+                        </span>
+                      ))}
                     </div>
                   </div>
 
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-3">{prof.bio}</p>
-
-                  <div className="flex flex-wrap gap-1.5">
-                    {prof.skills?.slice(0, 3).map((skill: string) => (
-                      <span key={skill} className="rounded-md bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 text-xs text-zinc-600 dark:text-zinc-300">
-                        {skill}
-                      </span>
-                    ))}
+                  <div className="p-6 pt-0 mt-auto border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400 bg-zinc-50/50 dark:bg-zinc-900/10">
+                    <span className="flex items-center gap-1 font-medium">
+                      <MapPin className="h-3.5 w-3.5 text-zinc-400 shrink-0" />
+                      <span className="line-clamp-1">{profile.address || 'Sierra Leone'}</span>
+                    </span>
+                    <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5 text-sm">
+                      Le {prof.hourly_rate}/hr
+                    </span>
                   </div>
-                </div>
-
-                <div className="p-6 pt-0 mt-auto border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400 bg-zinc-50/50 dark:bg-zinc-900/10">
-                  <span className="flex items-center gap-1 font-medium">
-                    <MapPin className="h-3.5 w-3.5 text-zinc-400 shrink-0" />
-                    <span className="line-clamp-1">{profile.address || 'Sierra Leone'}</span>
-                  </span>
-                  <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5 text-sm">
-                    Le {prof.hourly_rate}/hr
-                  </span>
-                </div>
-              </div>
-            )
-          })}
+                </Link>
+              )
+            })
+          )}
         </div>
       </section>
     </div>

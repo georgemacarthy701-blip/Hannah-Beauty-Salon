@@ -30,46 +30,7 @@ export default async function ProfessionalsPage({ searchParams }: PageProps) {
 
   const { data: professionals } = await query
 
-  const fallbackProfessionals = [
-    {
-      id: 'mock-prof-1',
-      user_id: 'mock-prof-user-1',
-      title: 'Senior Plumber & Pipefitter',
-      bio: 'Over 8 years experience servicing residential and commercial plumbing networks across Freetown. Fast emergency response and leak repairs.',
-      hourly_rate: 150,
-      skills: ['Leak Detection', 'Pipe Installation', 'Water Pumps'],
-      availability: true,
-      profiles: {
-        full_name: 'Abu Bakarr Kamara',
-        age: 32,
-        address: '24 Wilkinson Road',
-        city: 'Freetown, Western Area',
-        avatar_cloudinary_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120',
-        portfolio_items: [
-          { id: 'p1', image_url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=300' }
-        ]
-      }
-    },
-    {
-      id: 'mock-prof-2',
-      user_id: 'mock-prof-user-2',
-      title: 'Full-Stack Software Developer',
-      bio: 'Building responsive Next.js apps, database design, and mobile-friendly layouts. Available for freelance and contracts.',
-      hourly_rate: 350,
-      skills: ['Next.js', 'PostgreSQL', 'Tailwind CSS'],
-      availability: true,
-      profiles: {
-        full_name: 'Mariama Sall',
-        age: 26,
-        address: '15 Siaka Stevens St',
-        city: 'Freetown, Western Area',
-        avatar_cloudinary_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120',
-        portfolio_items: []
-      }
-    },
-  ]
-
-  const activeProfs = professionals && professionals.length > 0 ? professionals : fallbackProfessionals
+  const activeProfs = professionals || []
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 w-full space-y-8">
