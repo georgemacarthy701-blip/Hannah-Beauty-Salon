@@ -6,6 +6,7 @@ export interface ImageOptions {
   width?: number
   height?: number
   crop?: string
+  gravity?: string
 }
 
 export function formatImageUrl(url: string | null | undefined, options?: ImageOptions): string {
@@ -22,9 +23,10 @@ export function formatImageUrl(url: string | null | undefined, options?: ImageOp
     // Build transformation string
     let transformations = 'f_auto,q_auto'
     if (options) {
+      if (options.crop) transformations += `,c_${options.crop}`
+      if (options.gravity) transformations += `,g_${options.gravity}`
       if (options.width) transformations += `,w_${options.width}`
       if (options.height) transformations += `,h_${options.height}`
-      if (options.crop) transformations += `,c_${options.crop}`
     }
     
     // Inject transformations for optimal compression and format selection

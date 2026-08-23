@@ -54,15 +54,15 @@ export default function ProfessionalCard({ prof }: ProfessionalCardProps) {
         {/* Visual Preview container (clickable to open modal) */}
         <div 
           onClick={handleImageClick}
-          className="relative w-full h-56 md:h-64 overflow-hidden rounded-t-2xl bg-slate-900 flex items-center justify-center group/img"
+          className="relative w-full h-52 md:h-60 overflow-hidden rounded-t-xl bg-slate-900 flex items-center justify-center group/img"
         >
           {displayImage ? (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={formatImageUrl(displayImage, { width: 800 })}
+                src={formatImageUrl(displayImage, { crop: 'fill', gravity: 'face', width: 800, height: 550 })}
                 alt={profile.full_name || 'Professional Profile'}
-                className="w-full h-full object-cover object-top transition-transform duration-300 group-hover/img:scale-105 cursor-pointer"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover/img:scale-105 cursor-pointer"
               />
               <div className="absolute inset-0 bg-zinc-900/10 pointer-events-none"></div>
               <div className="absolute inset-0 bg-transparent opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
