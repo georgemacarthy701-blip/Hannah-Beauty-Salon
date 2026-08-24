@@ -31,45 +31,22 @@ export default async function ProfessionalDetailsPage({ params }: PageProps) {
     .eq('professional_id', id)
     .order('created_at', { ascending: false })
 
-  // Mock fallback if DB entry doesn't exist
-  let activeProf = professional
-  let activeReviews = reviews || []
-
   if (!professional) {
-    activeProf = {
-      id: id,
-      user_id: id,
-      title: 'Senior Plumber & Pipefitter',
-      bio: 'Over 8 years experience servicing residential and commercial plumbing networks across Freetown. Fast emergency response and leak repairs.',
-      hourly_rate: 150,
-      skills: ['Leak Detection', 'Pipe Installation', 'Water Pumps'],
-      availability: true,
-      profiles: {
-        full_name: 'Abu Bakarr Kamara',
-        age: 32,
-        address: '24 Wilkinson Road',
-        city: 'Freetown, Western Area',
-        avatar_cloudinary_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120',
-        phone: '+232 77 987654',
-      },
-      portfolio_items: [
-        { id: 'p1', image_url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=300', title: 'Commercial Piping project' }
-      ]
-    } as any
-
-    activeReviews = [
-      {
-        id: 'r1',
-        rating: 5,
-        comment: 'Abu was quick to fix our office kitchen leak. Very professional and polite!',
-        created_at: new Date(Date.now() - 3600000 * 24 * 5).toISOString(),
-        profiles: { full_name: 'Joseph Sesay' }
-      }
-    ] as any
-  } else {
-    // Map portfolio items from joined profiles to activeProf
-    activeProf.portfolio_items = activeProf.profiles?.portfolio_items || []
+    return (
+      <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <p className="text-lg font-semibold text-zinc-500 dark:text-zinc-400">Professional not found.</p>
+          <Link href="/professionals" className="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-500 hover:underline">
+            <ArrowLeft className="h-4 w-4" /> Back to Directory
+          </Link>
+        </div>
+      </div>
+    )
   }
+
+  const activeProf = professional
+  const activeReviews = reviews || []
+  activeProf.portfolio_items = activeProf.profiles?.portfolio_items || []
 
   const { data: { user } } = await supabase.auth.getUser()
 

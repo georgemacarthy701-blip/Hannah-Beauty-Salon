@@ -20,7 +20,7 @@ export default async function HomePage() {
       .limit(6),
     supabase
       .from('professional_details')
-      .select('id, title, bio, hourly_rate, skills, availability, profiles(full_name, age, address, city, avatar_cloudinary_url, portfolio_items(id, image_url, title))')
+      .select('id, user_id, title, bio, hourly_rate, skills, availability, profiles(full_name, age, address, city, avatar_cloudinary_url, portfolio_items(id, image_url, title))')
       .limit(6)
   ])
 
