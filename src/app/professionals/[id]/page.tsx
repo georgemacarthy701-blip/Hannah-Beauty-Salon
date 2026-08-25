@@ -5,7 +5,9 @@ import { formatImageUrl } from '@/utils/image'
 import { MapPin, Star, Calendar, UserCheck, ArrowLeft, Send, Phone, MessageSquare, ShieldAlert } from 'lucide-react'
 
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
+import { getOrCreateConversation } from '@/app/actions/messages'
 
 export const revalidate = 0
 
@@ -214,6 +216,34 @@ export default async function ProfessionalDetailsPage({ params }: PageProps) {
 
         {/* Side Panel: Submit Review & Contact Inquiry */}
         <div className="space-y-6">
+          {user && user.id !== activeProf.user_id && (
+            <form action={async () => {
+              'use server'
+              const res = await getOrCreateConversation(activeProf.user_id)
+              if (res && 'conversationId' in res && res.conversationId) {
+                redirect(`/messages?conversationId=${res.conversationId}`)
+              }
+            }}>
+              <button
+                type="submit"
+                className="w-full flex items-center justify-center gap-2 rounded-2xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-200 hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:bg-zinc-800/80 py-3 text-sm font-bold text-zinc-900 dark:text-white shadow-sm transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
+              >
+                <MessageSquare className="h-4 w-4 text-emerald-500" />
+                Chat with Professional
+              </button>
+            </form>
+          )}
+
+          {!user && (
+            <Link
+              href="/login"
+              className="w-full flex items-center justify-center gap-2 rounded-2xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800/80 hover:bg-zinc-850 py-3 text-sm font-bold text-zinc-300 shadow-sm transition-colors text-center"
+            >
+              <MessageSquare className="h-4 w-4 text-emerald-500" />
+              Sign in to Message
+            </Link>
+          )}
+
           <InquiryForm professionalId={activeProf.user_id} />
 
           {user && user.id !== activeProf.user_id ? (

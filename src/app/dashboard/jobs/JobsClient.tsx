@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createJob, updateJobStatus, updateApplicationStatus } from '@/app/actions/jobs'
-import { Briefcase, Users, Plus, CheckCircle, AlertCircle, Eye, EyeOff, MapPin, Calendar, RefreshCw, FileText } from 'lucide-react'
+import { Briefcase, Users, Plus, CheckCircle, AlertCircle, Eye, EyeOff, MapPin, Calendar, RefreshCw, FileText, MessageSquare } from 'lucide-react'
+import { getOrCreateConversation } from '@/app/actions/messages'
 
 interface JobsClientProps {
   companyId: string
@@ -89,6 +90,20 @@ export default function JobsClient({ companyId, initialJobs }: JobsClientProps) 
       router.refresh()
     } else {
       setError(res.error || 'Failed to update application status.')
+    }
+  }
+
+  const handleChatWithCandidate = async (targetUserId: string) => {
+    try {
+      const res = await getOrCreateConversation(targetUserId)
+      if (res && 'conversationId' in res && res.conversationId) {
+        router.push(`/messages?conversationId=${res.conversationId}`)
+      } else if (res && 'error' in res) {
+        alert(res.error)
+      }
+    } catch (err: any) {
+      console.error(err)
+      alert('Failed to start chat thread.')
     }
   }
 
@@ -330,6 +345,15 @@ export default function JobsClient({ companyId, initialJobs }: JobsClientProps) 
                                 </div>
 
                                 <div className="flex items-center gap-2">
+                                  <button
+                                    onClick={() => handleChatWithCandidate(profile.id)}
+                                    className="rounded bg-zinc-150 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 px-2 py-1 text-[10px] font-bold shadow-sm transition-colors flex items-center gap-1 border border-zinc-200 dark:border-zinc-750 cursor-pointer"
+                                    title="Send direct message"
+                                  >
+                                    <MessageSquare className="h-3 w-3 text-emerald-500" />
+                                    <span>Message</span>
+                                  </button>
+
                                   <span className={`rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase ${
                                     app.status === 'hired'
                                       ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400'

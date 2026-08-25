@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
-import { Menu, X, Briefcase, Users, LayoutDashboard, LogOut, ShieldAlert, Rss } from 'lucide-react'
+import { Menu, X, Briefcase, Users, LayoutDashboard, LogOut, ShieldAlert, Rss, Mail } from 'lucide-react'
 
 export default function Navbar() {
   const pathname = usePathname()
@@ -13,6 +13,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [role, setRole] = useState<string | null>(null)
+  const [unreadCount, setUnreadCount] = useState(0)
 
   useEffect(() => {
     async function getSession() {
@@ -25,26 +26,69 @@ export default function Navbar() {
           .eq('id', user.id)
           .single()
         setRole(profile?.role || 'professional')
+        fetchUnreadCount(user.id)
       }
     }
+
+    async function fetchUnreadCount(userId: string) {
+      const { count } = await supabase
+        .from('direct_messages')
+        .select('*', { count: 'exact', head: true })
+        .eq('receiver_id', userId)
+        .eq('is_read', false)
+      setUnreadCount(count || 0)
+    }
+
     getSession()
 
+    let channel: any = null
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      setUser(session?.user || null)
-      if (session?.user) {
+      const activeUser = session?.user || null
+      setUser(activeUser)
+      if (activeUser) {
         const { data: profile } = await supabase
           .from('profiles')
           .select('role')
-          .eq('id', session.user.id)
+          .eq('id', activeUser.id)
           .single()
         setRole(profile?.role || 'professional')
+        fetchUnreadCount(activeUser.id)
+
+        // Realtime subscription to dynamic message tables changes
+        channel = supabase
+          .channel('navbar-unread-messages')
+          .on(
+            'postgres_changes' as any,
+            { event: 'insert', schema: 'public', tableName: 'direct_messages' },
+            (payload: any) => {
+              if (payload.new.receiver_id === activeUser.id) {
+                setUnreadCount((prev) => prev + 1)
+              }
+            }
+          )
+          .on(
+            'postgres_changes' as any,
+            { event: 'update', schema: 'public', tableName: 'direct_messages' },
+            () => {
+              fetchUnreadCount(activeUser.id)
+            }
+          )
+          .subscribe()
       } else {
         setRole(null)
+        setUnreadCount(0)
+        if (channel) {
+          supabase.removeChannel(channel)
+        }
       }
     })
 
     return () => {
       subscription.unsubscribe()
+      if (channel) {
+        supabase.removeChannel(channel)
+      }
     }
   }, [supabase])
 
@@ -81,6 +125,24 @@ export default function Navbar() {
                 <Rss className="h-4 w-4" />
                 Feed
               </Link>
+              {user && (
+                <Link
+                  href="/messages"
+                  className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors relative ${
+                    isActive('/messages')
+                      ? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50'
+                      : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-50'
+                  }`}
+                >
+                  <Mail className="h-4 w-4" />
+                  <span>Messages</span>
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[9px] font-black text-white">
+                      {unreadCount}
+                    </span>
+                  )}
+                </Link>
+              )}
               <Link
                 href="/jobs"
                 className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
@@ -189,6 +251,27 @@ export default function Navbar() {
               <Rss className="h-5 w-5" />
               Feed
             </Link>
+            {user && (
+              <Link
+                href="/messages"
+                onClick={() => setIsOpen(false)}
+                className={`flex items-center justify-between rounded-lg px-3 py-2 text-base font-medium ${
+                  isActive('/messages')
+                    ? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50'
+                    : 'text-zinc-600 dark:text-zinc-400'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <Mail className="h-5 w-5" />
+                  <span>Messages</span>
+                </div>
+                {unreadCount > 0 && (
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-black text-white">
+                    {unreadCount}
+                  </span>
+                )}
+              </Link>
+            )}
             <Link
               href="/jobs"
               onClick={() => setIsOpen(false)}
