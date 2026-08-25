@@ -370,20 +370,24 @@ export default function MessagesClient({ initialConversations, currentUser }: Me
                     return (
                       <div
                         key={msg.id}
-                        className={`flex flex-col max-w-[75%] ${isOutgoing ? 'ml-auto items-end' : 'mr-auto items-start'}`}
+                        className={`flex flex-col mb-3 ${isOutgoing ? 'items-end' : 'items-start'}`}
                       >
                         <div
-                          className={`rounded-2xl px-4 py-2.5 text-sm whitespace-pre-wrap leading-relaxed shadow-sm ${
+                          className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed max-w-[75%] break-words shadow-sm ${
                             isOutgoing
-                              ? 'bg-emerald-500 text-white rounded-br-none'
-                              : 'bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-250 border border-zinc-150 dark:border-zinc-800 rounded-bl-none'
+                              ? 'bg-emerald-600 text-white rounded-tr-none'
+                              : 'bg-slate-800 text-slate-100 border border-slate-700/80 rounded-tl-none'
                           }`}
                         >
-                          {msg.message}
+                          <p className="whitespace-pre-wrap">{msg.message}</p>
+                          <span
+                            className={`text-[10px] mt-1 block ${
+                              isOutgoing ? 'text-emerald-200/80 text-right' : 'text-slate-400'
+                            }`}
+                          >
+                            {msgTime}
+                          </span>
                         </div>
-                        <span className="text-[9px] text-zinc-400 mt-1 px-1">
-                          {msgTime}
-                        </span>
                       </div>
                     )
                   })
