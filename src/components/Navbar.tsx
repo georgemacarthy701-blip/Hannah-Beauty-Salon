@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
-import { Menu, X, Briefcase, Users, LayoutDashboard, LogOut, ShieldAlert } from 'lucide-react'
+import { Menu, X, Briefcase, Users, LayoutDashboard, LogOut, ShieldAlert, Rss } from 'lucide-react'
 
 export default function Navbar() {
   const pathname = usePathname()
@@ -70,6 +70,17 @@ export default function Navbar() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:ml-8 md:flex md:space-x-1 lg:space-x-4">
+              <Link
+                href="/feed"
+                className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  isActive('/feed')
+                    ? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50'
+                    : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-50'
+                }`}
+              >
+                <Rss className="h-4 w-4" />
+                Feed
+              </Link>
               <Link
                 href="/jobs"
                 className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
@@ -166,6 +177,18 @@ export default function Navbar() {
       {isOpen && (
         <div className="border-t border-zinc-200 bg-white px-2 pt-2 pb-4 dark:border-zinc-800 dark:bg-zinc-950 md:hidden">
           <div className="space-y-1">
+            <Link
+              href="/feed"
+              onClick={() => setIsOpen(false)}
+              className={`flex items-center gap-2 rounded-lg px-3 py-2 text-base font-medium ${
+                isActive('/feed')
+                  ? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50'
+                  : 'text-zinc-600 dark:text-zinc-400'
+              }`}
+            >
+              <Rss className="h-5 w-5" />
+              Feed
+            </Link>
             <Link
               href="/jobs"
               onClick={() => setIsOpen(false)}
