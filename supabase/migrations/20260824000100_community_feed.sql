@@ -78,3 +78,9 @@ CREATE INDEX IF NOT EXISTS idx_posts_author_id ON public.posts(author_id);
 CREATE INDEX IF NOT EXISTS idx_posts_created_at ON public.posts(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_post_likes_post_id ON public.post_likes(post_id);
 CREATE INDEX IF NOT EXISTS idx_post_comments_post_id ON public.post_comments(post_id);
+
+-- 7. Grant Permissions to roles
+GRANT ALL ON TABLE public.posts TO anon, authenticated, service_role;
+GRANT ALL ON TABLE public.post_likes TO anon, authenticated, service_role;
+GRANT ALL ON TABLE public.post_comments TO anon, authenticated, service_role;
+
