@@ -40,7 +40,7 @@ export default function ProductCard({ product, currentUser, isAdmin, onProductDe
 
   const orderMessage = `*NEW ORDER - LEONELINK MARKETPLACE* 🛍️\n\n` +
     `*Product:* ${product.title}\n` +
-    `*Price:* ${product.currency || 'NLe'} ${product.price}\n` +
+    `*Price:* ${product.currency || 'Le'} ${product.price}\n` +
     `*Location:* ${product.location || 'Sierra Leone'}\n\n` +
     `Hello, I saw this item on LeoneLink and I would like to place an order. Is it available for delivery/pickup?`;
 
@@ -131,7 +131,7 @@ export default function ProductCard({ product, currentUser, isAdmin, onProductDe
               {product.title}
             </h3>
             <span className="text-sm font-black text-emerald-500 shrink-0">
-              NLe {product.price}
+              {product.currency || 'Le'} {product.price}
             </span>
           </div>
 
@@ -219,7 +219,7 @@ export default function ProductCard({ product, currentUser, isAdmin, onProductDe
                 
                 <div className="text-left sm:text-right shrink-0">
                   <span className="block text-2xl font-black text-emerald-500">
-                    NLe {product.price}
+                    {product.currency || 'Le'} {product.price}
                   </span>
                   <span className="text-[10px] text-zinc-400 block mt-0.5">
                     Listed on {new Date(product.created_at).toLocaleDateString()}

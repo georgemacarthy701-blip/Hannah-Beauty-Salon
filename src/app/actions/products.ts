@@ -39,7 +39,7 @@ export async function createProduct(formData: FormData) {
       title: title.trim(),
       description: description ? description.trim() : null,
       price,
-      currency: 'NLE',
+      currency: 'Le',
       category: category.trim(),
       location: location.trim(),
       image_url: imageUrl.trim(),

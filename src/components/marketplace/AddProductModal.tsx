@@ -131,7 +131,7 @@ export default function AddProductModal({ onClose, onProductCreated }: AddProduc
             {/* Price */}
             <div>
               <label className="block text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-1.5">
-                Price (NLe) *
+                Price (Le) *
               </label>
               <input
                 type="number"
