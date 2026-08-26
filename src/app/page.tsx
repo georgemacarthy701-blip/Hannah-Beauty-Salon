@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/server'
-import { Search, Briefcase, Users, ArrowRight, MapPin, DollarSign, Calendar, Star } from 'lucide-react'
+import { Search, Briefcase, Users, ArrowRight, MapPin, DollarSign, Calendar, Star, Store } from 'lucide-react'
 import { formatImageUrl } from '@/utils/image'
 import ProfessionalCard from './professionals/ProfessionalCard'
 
@@ -62,31 +62,42 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.1),transparent_50%)]" />
         <div className="relative mx-auto max-w-4xl text-center space-y-6">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3.5 py-1.5 text-sm font-semibold text-emerald-400 border border-emerald-500/20">
-            Sierra Leone's #1 Job & Service Hub
+            Sierra Leone's Premier Talent, Business & Job Platform
           </span>
-          <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-tight">
-            Connecting <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">Skills, Services</span> & Opportunities
+          <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-tight text-white">
+            Connecting <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">Skills, Businesses</span> & Opportunities
           </h1>
           <p className="text-zinc-300 max-w-2xl mx-auto text-lg sm:text-xl">
-            Discover trusted local professionals, explore career-building corporate vacancies, and grow your network in Sierra Leone.
+            Discover verified local professionals, shop products directly from local businesses, explore career openings, and grow your network in Sierra Leone.
           </p>
 
           {/* Core Navigation Triggers */}
-          <div className="pt-8 flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/jobs"
-              className="flex items-center justify-center gap-2 rounded-full bg-emerald-500 hover:bg-emerald-600 px-8 py-4 font-semibold text-white shadow-lg shadow-emerald-500/20 transition-all hover:scale-[1.02]"
-            >
-              <Briefcase className="h-5 w-5" />
-              Explore Open Jobs
-            </Link>
-            <Link
-              href="/professionals"
-              className="flex items-center justify-center gap-2 rounded-full border border-zinc-700 bg-zinc-900/60 hover:bg-zinc-800/80 px-8 py-4 font-semibold text-zinc-100 backdrop-blur-sm transition-all hover:scale-[1.02]"
-            >
-              <Users className="h-5 w-5" />
-              Find Service Professionals
-            </Link>
+          <div className="pt-8 flex flex-col items-center gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md sm:max-w-none">
+              <Link
+                href="/marketplace"
+                className="flex items-center justify-center gap-2 rounded-full bg-emerald-500 hover:bg-emerald-600 px-8 py-4 font-semibold text-white shadow-lg shadow-emerald-500/20 transition-all hover:scale-[1.02] cursor-pointer"
+              >
+                <Store className="h-5 w-5" />
+                Explore Marketplace
+              </Link>
+              <Link
+                href="/professionals"
+                className="flex items-center justify-center gap-2 rounded-full border border-zinc-700 bg-zinc-900/60 hover:bg-zinc-800/80 px-8 py-4 font-semibold text-zinc-100 backdrop-blur-sm transition-all hover:scale-[1.02] cursor-pointer"
+              >
+                <Users className="h-5 w-5" />
+                Find Professionals
+              </Link>
+            </div>
+            
+            <div className="pt-2">
+              <Link 
+                href="/jobs" 
+                className="text-zinc-400 hover:text-emerald-400 font-semibold text-sm transition-colors inline-flex items-center gap-1 hover:underline cursor-pointer"
+              >
+                Browse Jobs <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
