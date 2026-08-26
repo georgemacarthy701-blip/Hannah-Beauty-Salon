@@ -25,6 +25,14 @@ export default function ProductCard({ product, currentUser, isAdmin, onProductDe
   const sellerAvatar = seller.avatar_cloudinary_url || seller.avatar_url || seller.image || null
   const canDelete = currentUser && (product.seller_id === currentUser.id || isAdmin)
 
+  const sellerDetails = Array.isArray(seller.company_details)
+    ? (seller.company_details[0] || {})
+    : (seller.company_details || {})
+
+  const sellerName = (seller.role === 'business' || seller.role === 'company') && sellerDetails.company_name
+    ? sellerDetails.company_name
+    : seller.full_name || 'Verified Seller'
+
   const formatWhatsAppNumber = (phone?: string) => {
     if (!phone) return '23200000000';
     let clean = phone.replace(/[^0-9]/g, '');
@@ -152,16 +160,16 @@ export default function ProductCard({ product, currentUser, isAdmin, onProductDe
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={formatImageUrl(sellerAvatar, { width: 48, height: 48, crop: 'fill' })}
-                  alt={seller.full_name}
+                  alt={sellerName}
                   className="h-6 w-6 rounded-full object-cover border border-zinc-200 dark:border-zinc-800"
                 />
               ) : (
                 <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 text-[10px] font-bold dark:bg-emerald-950/30 dark:text-emerald-400">
-                  {seller.full_name?.[0] || 'U'}
+                  {sellerName[0] || 'U'}
                 </div>
               )}
               <span className="text-[10px] text-zinc-600 dark:text-zinc-400 font-semibold truncate max-w-[120px]">
-                {seller.full_name}
+                {sellerName}
               </span>
             </div>
           </div>
@@ -245,12 +253,12 @@ export default function ProductCard({ product, currentUser, isAdmin, onProductDe
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={formatImageUrl(sellerAvatar, { width: 96, height: 96, crop: 'fill' })}
-                        alt={seller.full_name}
+                        alt={sellerName}
                         className="h-11 w-11 rounded-full object-cover border border-zinc-200 dark:border-zinc-800"
                       />
                     ) : (
                       <div className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 font-bold dark:bg-emerald-950/30 dark:text-emerald-400 text-base">
-                        {seller.full_name?.[0] || 'U'}
+                        {sellerName[0] || 'U'}
                       </div>
                     )}
                   </Link>
@@ -258,10 +266,10 @@ export default function ProductCard({ product, currentUser, isAdmin, onProductDe
                   <div>
                     <h4 className="font-bold text-sm text-zinc-900 dark:text-white flex items-center gap-1.5">
                       <Link href={`/professionals/${product.seller_id}`} className="hover:text-emerald-500 transition-colors">
-                        {seller.full_name}
+                        {sellerName}
                       </Link>
                     </h4>
-                    <p className="text-xs text-zinc-400 capitalize">{seller.role || 'Professional Seller'}</p>
+                    <p className="text-xs text-zinc-400 capitalize">{seller.role === 'business' ? 'Business Seller' : seller.role || 'Professional Seller'}</p>
                   </div>
                 </div>
 

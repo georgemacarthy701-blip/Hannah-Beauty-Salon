@@ -14,7 +14,7 @@ export default async function HomePage() {
   const [jobsResult, profsResult] = await Promise.all([
     supabase
       .from('jobs')
-      .select('id, title, description, category, location_address, budget, created_at, company_profile:profiles!jobs_company_id_fkey(full_name, avatar_cloudinary_url)')
+      .select('id, title, description, category, location_address, budget, created_at, company_profile:profiles!jobs_company_id_fkey(full_name, avatar_cloudinary_url, company_details(company_name, logo_cloudinary_url))')
       .eq('status', 'open')
       .order('created_at', { ascending: false })
       .limit(6),
@@ -31,11 +31,14 @@ export default async function HomePage() {
 
   const jobs = (rawJobs || []).map(j => {
     const profile = (j as any).company_profile || {}
+    const compDetails = Array.isArray(profile.company_details)
+      ? (profile.company_details[0] || {})
+      : (profile.company_details || {})
     return {
       ...j,
       company_details: {
-        company_name: profile.full_name,
-        logo_cloudinary_url: profile.avatar_cloudinary_url
+        company_name: compDetails.company_name || profile.full_name || 'Employer',
+        logo_cloudinary_url: compDetails.logo_cloudinary_url || profile.avatar_cloudinary_url || null
       }
     }
   })

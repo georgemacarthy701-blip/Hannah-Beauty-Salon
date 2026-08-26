@@ -19,7 +19,7 @@ export default async function JobsPage({ searchParams }: PageProps) {
   // Query jobs joining company profile details
   let query = supabase
     .from('jobs')
-    .select('*, company_details:profiles!jobs_company_id_fkey(company_name:full_name, logo_cloudinary_url:avatar_cloudinary_url)')
+    .select('*, company_profile:profiles!jobs_company_id_fkey(full_name, avatar_cloudinary_url, company_details(company_name, logo_cloudinary_url))')
     .eq('status', 'open')
 
   if (search) {
@@ -60,7 +60,21 @@ export default async function JobsPage({ searchParams }: PageProps) {
     },
   ]
 
-  const activeJobs = jobs && jobs.length > 0 ? jobs : fallbackJobs
+  const mappedJobs = jobs ? jobs.map((job: any) => {
+    const profile = job.company_profile || {}
+    const compDetails = Array.isArray(profile.company_details)
+      ? (profile.company_details[0] || {})
+      : (profile.company_details || {})
+    return {
+      ...job,
+      company_details: {
+        company_name: compDetails.company_name || profile.full_name || 'Employer',
+        logo_cloudinary_url: compDetails.logo_cloudinary_url || profile.avatar_cloudinary_url || null,
+      }
+    }
+  }) : []
+
+  const activeJobs = mappedJobs.length > 0 ? mappedJobs : fallbackJobs
 
   // Define unique categories for filtering
   const categories = ['All Categories', 'Electrical Work', 'Plumbing', 'Construction', 'Engineering', 'IT / Software', 'Creative / Design', 'Education']

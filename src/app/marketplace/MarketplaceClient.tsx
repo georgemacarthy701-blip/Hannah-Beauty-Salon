@@ -40,7 +40,14 @@ export default function MarketplaceClient({ initialProducts, currentUser, isAdmi
         .from('products')
         .select(`
           *,
-          profiles:seller_id(id, full_name, role, avatar_cloudinary_url, phone)
+          profiles:seller_id(
+            id, 
+            full_name, 
+            role, 
+            avatar_cloudinary_url, 
+            phone,
+            company_details(company_name)
+          )
         `)
         .order('created_at', { ascending: false })
 
