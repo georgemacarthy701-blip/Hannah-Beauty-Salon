@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
-import { Menu, X, Briefcase, Users, LayoutDashboard, LogOut, ShieldAlert, Rss, Mail } from 'lucide-react'
+import { Menu, X, Briefcase, Users, LayoutDashboard, LogOut, ShieldAlert, Rss, Mail, Store } from 'lucide-react'
 
 export default function Navbar() {
   const pathname = usePathname()
@@ -165,6 +165,17 @@ export default function Navbar() {
                 <Users className="h-4 w-4" />
                 Professionals
               </Link>
+              <Link
+                href="/marketplace"
+                className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  isActive('/marketplace')
+                    ? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50'
+                    : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-50'
+                }`}
+              >
+                <Store className="h-4 w-4" />
+                Marketplace
+              </Link>
             </div>
           </div>
 
@@ -295,6 +306,18 @@ export default function Navbar() {
             >
               <Users className="h-5 w-5" />
               Professionals
+            </Link>
+            <Link
+              href="/marketplace"
+              onClick={() => setIsOpen(false)}
+              className={`flex items-center gap-2 rounded-lg px-3 py-2 text-base font-medium ${
+                isActive('/marketplace')
+                  ? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50'
+                  : 'text-zinc-600 dark:text-zinc-400'
+              }`}
+            >
+              <Store className="h-5 w-5" />
+              Marketplace
             </Link>
 
             {user ? (
