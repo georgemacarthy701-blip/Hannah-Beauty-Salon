@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/server'
-import { Search, Briefcase, Users, ArrowRight, MapPin, DollarSign, Calendar, Star, Store } from 'lucide-react'
+import { Search, Briefcase, Users, ArrowRight, MapPin, DollarSign, Calendar, Star, Store, FileText } from 'lucide-react'
 import { formatImageUrl } from '@/utils/image'
 import ProfessionalCard from './professionals/ProfessionalCard'
 
@@ -10,8 +10,8 @@ export const revalidate = 0
 export default async function HomePage() {
   const supabase = await createClient()
 
-  // Fetch both jobs and professionals in parallel to prevent query waterfalls
-  const [jobsResult, profsResult] = await Promise.all([
+  // Fetch jobs, professionals, marketplace items, and feed posts in parallel to prevent query waterfalls
+  const [jobsResult, profsResult, productsResult, postsResult] = await Promise.all([
     supabase
       .from('jobs')
       .select('id, title, description, category, location_address, budget, created_at, company_profile:profiles!jobs_company_id_fkey(full_name, avatar_cloudinary_url, company_details(company_name, logo_cloudinary_url))')
@@ -21,11 +21,23 @@ export default async function HomePage() {
     supabase
       .from('professional_details')
       .select('id, user_id, title, bio, hourly_rate, skills, availability, profiles(full_name, age, address, city, avatar_cloudinary_url, portfolio_items(id, image_url, title))')
-      .limit(6)
+      .limit(6),
+    supabase
+      .from('products')
+      .select('id, title, description, price, currency, image_url, category, location, created_at, profiles:seller_id(full_name, role, company_details(company_name))')
+      .order('created_at', { ascending: false })
+      .limit(3),
+    supabase
+      .from('posts')
+      .select('id, content, image_url, created_at, profiles:author_id(full_name, role, avatar_cloudinary_url, company_details(company_name))')
+      .order('created_at', { ascending: false })
+      .limit(3)
   ])
 
   const rawJobs = jobsResult.data
   const rawProfs = profsResult.data
+  const rawProducts = productsResult.data
+  const rawPosts = postsResult.data
 
   console.log('HOMEPAGE_PROFILES:', { count: rawProfs?.length, error: profsResult.error })
 
@@ -52,8 +64,34 @@ export default async function HomePage() {
     }
   })
 
+  const mappedProducts = (rawProducts || []).map(p => {
+    const profile = (p.profiles as any) || {}
+    const compDetails = Array.isArray(profile.company_details) ? (profile.company_details[0] || {}) : (profile.company_details || {})
+    return {
+      ...p,
+      seller_name: (profile.role === 'business' || profile.role === 'company') && compDetails.company_name
+        ? compDetails.company_name
+        : profile.full_name || 'Verified Seller'
+    }
+  })
+
+  const mappedPosts = (rawPosts || []).map(p => {
+    const profile = (p.profiles as any) || {}
+    const compDetails = Array.isArray(profile.company_details) ? (profile.company_details[0] || {}) : (profile.company_details || {})
+    return {
+      ...p,
+      author_name: (profile.role === 'business' || profile.role === 'company') && compDetails.company_name
+        ? compDetails.company_name
+        : profile.full_name || 'Member',
+      author_avatar: profile.avatar_cloudinary_url || null,
+      author_role: profile.role || 'Member'
+    }
+  })
+
   const activeJobs = jobs || []
   const activeProfs = professionals || []
+  const activeProducts = mappedProducts
+  const activePosts = mappedPosts
 
   return (
     <div className="flex flex-col gap-16 py-8">
@@ -162,6 +200,137 @@ export default async function HomePage() {
                   </span>
                 </div>
               </Link>
+            ))
+          )}
+        </div>
+      </section>
+
+      {/* Trending Marketplace Items Section */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full space-y-6">
+        <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-4">
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">Trending Marketplace Items</h2>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">Recently added products and goods from local businesses</p>
+          </div>
+          <Link href="/marketplace" className="flex items-center gap-1 text-sm font-semibold text-emerald-500 hover:text-emerald-600 transition-colors">
+            View all products <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {activeProducts.length === 0 ? (
+            <div className="md:col-span-3 text-center py-12 rounded-2xl border border-dashed border-zinc-300 dark:border-zinc-800 w-full">
+              <Store className="h-10 w-10 mx-auto text-zinc-400 mb-2" />
+              <p className="font-semibold text-zinc-600 dark:text-zinc-400">No products listed yet. Check back soon!</p>
+            </div>
+          ) : (
+            activeProducts.map((product: any) => (
+              <div
+                key={product.id}
+                className="group flex flex-col justify-between p-5 rounded-2xl border border-zinc-200/80 bg-white shadow-sm hover:shadow-md hover:border-emerald-500/50 transition-all dark:border-zinc-800/80 dark:bg-zinc-900/40 relative overflow-hidden"
+              >
+                <div>
+                  <div className="relative w-full h-48 mb-3 rounded-xl overflow-hidden bg-slate-900">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={formatImageUrl(product.image_url, { width: 450, height: 300, crop: 'fill' })}
+                      alt={product.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <span className="absolute bottom-2 left-2 bg-black/60 text-emerald-400 text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wide">
+                      {product.category}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-start gap-2 mb-1">
+                    <h3 className="font-bold text-zinc-900 dark:text-white text-base truncate">{product.title}</h3>
+                    <span className="text-emerald-500 font-bold whitespace-nowrap text-base">
+                      Le {product.price}
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-zinc-400 dark:text-zinc-500 flex items-center gap-1.5 mb-2">
+                    <MapPin className="h-3 w-3 shrink-0" />
+                    <span>{product.location}</span>
+                  </p>
+                  {product.description && (
+                    <p className="text-xs text-zinc-500 dark:text-zinc-450 line-clamp-2 leading-relaxed mb-4">
+                      {product.description}
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-center justify-between border-t border-zinc-100 dark:border-zinc-800/80 pt-3 mt-auto gap-3">
+                  <span className="text-[10px] font-semibold text-zinc-500 truncate max-w-[150px]">
+                    By {product.seller_name}
+                  </span>
+                  <Link
+                    href="/marketplace"
+                    className="rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-4 py-1.5 text-[10px] transition-colors cursor-pointer shrink-0"
+                  >
+                    View details
+                  </Link>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </section>
+
+      {/* Community Updates Section */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full space-y-6">
+        <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-4">
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">Community Updates</h2>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">Latest discussions and professional updates</p>
+          </div>
+          <Link href="/feed" className="flex items-center gap-1 text-sm font-semibold text-emerald-500 hover:text-emerald-600 transition-colors">
+            Join the feed <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {activePosts.length === 0 ? (
+            <div className="md:col-span-3 text-center py-12 rounded-2xl border border-dashed border-zinc-300 dark:border-zinc-800 w-full">
+              <FileText className="h-10 w-10 mx-auto text-zinc-400 mb-2" />
+              <p className="font-semibold text-zinc-600 dark:text-zinc-400">No discussions posted yet. Join the conversation!</p>
+            </div>
+          ) : (
+            activePosts.map((post: any) => (
+              <div
+                key={post.id}
+                className="group flex flex-col justify-between p-5 rounded-2xl border border-zinc-200/80 bg-white shadow-sm hover:shadow-md hover:border-emerald-500/50 transition-all dark:border-zinc-800/80 dark:bg-zinc-900/40 relative"
+              >
+                <div>
+                  <div className="flex items-center gap-3 mb-3 border-b border-zinc-50 dark:border-zinc-850 pb-2.5">
+                    {post.author_avatar ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={formatImageUrl(post.author_avatar, { width: 64, height: 64, crop: 'fill' })}
+                        alt={post.author_name}
+                        className="w-9 h-9 rounded-full object-cover border border-zinc-200 dark:border-zinc-800"
+                      />
+                    ) : (
+                      <div className="w-9 h-9 rounded-full bg-emerald-50 text-emerald-600 font-bold border border-zinc-100 dark:bg-emerald-950/30 dark:text-emerald-400 flex items-center justify-center text-sm">
+                        {post.author_name[0] || 'U'}
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-zinc-900 dark:text-white text-sm font-semibold leading-tight">
+                        {post.author_name}
+                      </p>
+                      <p className="text-zinc-400 text-[10px] capitalize font-medium">{post.author_role}</p>
+                    </div>
+                  </div>
+                  <p className="text-zinc-650 dark:text-zinc-300 text-xs line-clamp-3 leading-relaxed mb-3">
+                    {post.content}
+                  </p>
+                </div>
+                <Link
+                  href="/feed"
+                  className="text-emerald-500 hover:text-emerald-600 dark:text-emerald-400 text-xs font-semibold hover:underline inline-flex items-center gap-1.5 mt-2 cursor-pointer"
+                >
+                  <span>Read full discussion</span>
+                  <ArrowRight className="h-3 w-3" />
+                </Link>
+              </div>
             ))
           )}
         </div>
