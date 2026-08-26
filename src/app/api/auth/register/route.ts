@@ -129,7 +129,7 @@ export async function POST(req: NextRequest) {
           { status: 500 }
         )
       }
-    } else if (role === 'company') {
+    } else if (role === 'company' || role === 'business') {
       const { error: compError } = await adminClient
         .from('company_details')
         .insert({

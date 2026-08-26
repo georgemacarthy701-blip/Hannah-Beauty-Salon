@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/client'
 import { uploadImage } from '@/app/actions/media'
-import { Loader2, Mail, Lock, Phone, User, Calendar, MapPin, Briefcase, FileText, Image as ImageIcon, AlertCircle } from 'lucide-react'
+import { Loader2, Mail, Lock, Phone, User, Calendar, MapPin, Briefcase, FileText, Image as ImageIcon, AlertCircle, Store } from 'lucide-react'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -13,7 +13,7 @@ export default function RegisterPage() {
 
   // Step state
   const [step, setStep] = useState(1)
-  const [role, setRole] = useState<'professional' | 'company'>('professional')
+  const [role, setRole] = useState<'professional' | 'company' | 'business'>('professional')
 
   // Auth fields
   const [email, setEmail] = useState('')
@@ -206,7 +206,7 @@ export default function RegisterPage() {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">I want to register as a:</label>
-                <div className="mt-2 grid grid-cols-2 gap-4">
+                <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <button
                     type="button"
                     onClick={() => setRole('professional')}
@@ -218,7 +218,20 @@ export default function RegisterPage() {
                   >
                     <User className="mb-2 h-6 w-6 text-emerald-500" />
                     <span className="font-semibold text-sm">Service Professional</span>
-                    <span className="text-xs text-zinc-500 mt-1">Showcase my skills & find jobs</span>
+                    <span className="text-[10px] text-zinc-550 dark:text-zinc-400 mt-1 leading-snug">Showcase skills & find jobs</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setRole('business')}
+                    className={`flex flex-col items-center justify-center rounded-xl border p-4 text-center transition-all ${
+                      role === 'business'
+                        ? 'border-emerald-500 bg-emerald-50/50 text-emerald-900 dark:bg-emerald-950/20 dark:text-emerald-400'
+                        : 'border-zinc-200 hover:border-zinc-300 dark:border-zinc-800'
+                    }`}
+                  >
+                    <Store className="mb-2 h-6 w-6 text-emerald-500" />
+                    <span className="font-semibold text-sm">Business / Merchant</span>
+                    <span className="text-[10px] text-zinc-550 dark:text-zinc-400 mt-1 leading-snug">Sell products & list catalogs</span>
                   </button>
                   <button
                     type="button"
@@ -231,7 +244,7 @@ export default function RegisterPage() {
                   >
                     <Briefcase className="mb-2 h-6 w-6 text-emerald-500" />
                     <span className="font-semibold text-sm">Company / Employer</span>
-                    <span className="text-xs text-zinc-500 mt-1">Post openings & hire talent</span>
+                    <span className="text-[10px] text-zinc-550 dark:text-zinc-400 mt-1 leading-snug">Post openings & hire talent</span>
                   </button>
                 </div>
               </div>
@@ -414,7 +427,7 @@ export default function RegisterPage() {
               {/* Avatar Upload (Cloudinary) */}
               <div>
                 <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                  {role === 'professional' ? 'Profile Picture' : 'Company Logo'}
+                  {role === 'professional' ? 'Profile Picture' : role === 'business' ? 'Business Logo / Photo' : 'Company Logo'}
                 </label>
                 <div className="mt-2 flex items-center gap-4">
                   {avatarUrl ? (
@@ -522,10 +535,12 @@ export default function RegisterPage() {
             ) : (
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="compName" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Company Name</label>
+                  <label htmlFor="compName" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                    {role === 'business' ? 'Business Name' : 'Company Name'}
+                  </label>
                   <div className="relative mt-1">
                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400">
-                      <Briefcase className="h-5 w-5" />
+                      {role === 'business' ? <Store className="h-5 w-5" /> : <Briefcase className="h-5 w-5" />}
                     </div>
                     <input
                       id="compName"
@@ -534,13 +549,13 @@ export default function RegisterPage() {
                       value={companyName}
                       onChange={(e) => setCompanyName(e.target.value)}
                       className="block w-full rounded-lg border border-zinc-300 bg-white py-2.5 pl-10 pr-3 text-sm placeholder-zinc-400 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-500"
-                      placeholder="Leone Trading Ltd"
+                      placeholder={role === 'business' ? 'e.g., Kono Building Materials, Lumley Store' : 'Leone Trading Ltd'}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="website" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Website URL</label>
+                  <label htmlFor="website" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Website URL (Optional)</label>
                   <input
                     id="website"
                     type="url"
@@ -552,7 +567,9 @@ export default function RegisterPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="desc" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Company Description</label>
+                  <label htmlFor="desc" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                    {role === 'business' ? 'Business Description' : 'Company Description'}
+                  </label>
                   <div className="relative mt-1">
                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-start pt-3 pl-3 text-zinc-400">
                       <FileText className="h-5 w-5" />
@@ -564,7 +581,7 @@ export default function RegisterPage() {
                       onChange={(e) => setDescription(e.target.value)}
                       rows={4}
                       className="block w-full rounded-lg border border-zinc-300 bg-white py-2.5 pl-10 pr-3 text-sm placeholder-zinc-400 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-500"
-                      placeholder="Tell job seekers about your company, values, and sector..."
+                      placeholder={role === 'business' ? 'Tell customers about your products, services, opening hours, and location...' : 'Tell job seekers about your company, values, and sector...'}
                     />
                   </div>
                 </div>

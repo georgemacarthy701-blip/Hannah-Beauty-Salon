@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 import { markNotificationRead } from '@/app/actions/notifications'
-import { User, Users, Bell, Briefcase, FileText, CheckCircle2, UserCheck, Shield, ChevronRight, Mail, Landmark } from 'lucide-react'
+import { User, Users, Bell, Briefcase, FileText, CheckCircle2, UserCheck, Shield, ChevronRight, Mail, Landmark, Store, MapPin } from 'lucide-react'
 
 export const revalidate = 0
 
@@ -67,7 +67,7 @@ export default async function DashboardHubPage() {
       
       appCount = count || 0
     }
-  } else if (role === 'company') {
+  } else if (role === 'company' || role === 'business') {
     const { data: comp } = await supabase
       .from('company_details')
       .select('*')
@@ -77,27 +77,37 @@ export default async function DashboardHubPage() {
     companyDetails = comp
 
     if (comp) {
-      const { count: jobCount } = await supabase
-        .from('jobs')
-        .select('*', { count: 'exact', head: true })
-        .eq('company_id', user.id)
-      
-      jobsCount = jobCount || 0
-
-      // Total applications received by this company's jobs
-      const { data: companyJobs } = await supabase
-        .from('jobs')
-        .select('id')
-        .eq('company_id', user.id)
-
-      if (companyJobs && companyJobs.length > 0) {
-        const jobIds = companyJobs.map(j => j.id)
-        const { count: applicationCount } = await supabase
-          .from('job_applications')
+      if (role === 'company') {
+        const { count: jobCount } = await supabase
+          .from('jobs')
           .select('*', { count: 'exact', head: true })
-          .in('job_id', jobIds)
+          .eq('company_id', user.id)
         
-        appCount = applicationCount || 0
+        jobsCount = jobCount || 0
+
+        // Total applications received by this company's jobs
+        const { data: companyJobs } = await supabase
+          .from('jobs')
+          .select('id')
+          .eq('company_id', user.id)
+
+        if (companyJobs && companyJobs.length > 0) {
+          const jobIds = companyJobs.map(j => j.id)
+          const { count: applicationCount } = await supabase
+            .from('job_applications')
+            .select('*', { count: 'exact', head: true })
+            .in('job_id', jobIds)
+          
+          appCount = applicationCount || 0
+        }
+      } else {
+        // Fetch active products count for business owner
+        const { count: prodCount } = await supabase
+          .from('products')
+          .select('*', { count: 'exact', head: true })
+          .eq('seller_id', user.id)
+        
+        jobsCount = prodCount || 0
       }
     }
   }
@@ -125,6 +135,13 @@ export default async function DashboardHubPage() {
               className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-emerald-600 shadow-md transition-all hover:bg-zinc-50"
             >
               Post a Job
+            </Link>
+          ) : role === 'business' ? (
+            <Link
+              href="/marketplace"
+              className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-emerald-600 shadow-md transition-all hover:bg-zinc-50"
+            >
+              Manage Marketplace
             </Link>
           ) : (
             <Link
@@ -169,6 +186,33 @@ export default async function DashboardHubPage() {
                 <span className="text-xs text-zinc-500 dark:text-zinc-400 font-semibold block uppercase tracking-wider">Availability</span>
                 <strong className="text-lg font-bold text-zinc-900 dark:text-white">
                   {professionalDetails?.availability ? 'Available for Hire' : 'Unavailable'}
+                </strong>
+              </div>
+            </div>
+          </>
+        ) : role === 'business' ? (
+          <>
+            <Link
+              href="/marketplace"
+              className="rounded-2xl border border-zinc-200/80 bg-white p-6 shadow-sm hover:shadow-md hover:border-emerald-500/50 transition-all dark:border-zinc-800/80 dark:bg-zinc-900/40 flex items-center gap-4 cursor-pointer w-full text-left"
+            >
+              <div className="rounded-xl bg-blue-50 dark:bg-blue-950/30 p-3 text-blue-500">
+                <Store className="h-6 w-6" />
+              </div>
+              <div>
+                <span className="text-xs text-zinc-500 dark:text-zinc-400 font-semibold block uppercase tracking-wider">Product Listings</span>
+                <strong className="text-lg font-bold text-zinc-900 dark:text-white">{jobsCount} Products</strong>
+              </div>
+            </Link>
+
+            <div className="rounded-2xl border border-zinc-200/80 bg-white p-6 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900/40 flex items-center gap-4">
+              <div className="rounded-xl bg-amber-50 dark:bg-amber-950/30 p-3 text-amber-500">
+                <MapPin className="h-6 w-6" />
+              </div>
+              <div>
+                <span className="text-xs text-zinc-500 dark:text-zinc-400 font-semibold block uppercase tracking-wider">Business Location</span>
+                <strong className="text-lg font-bold text-zinc-900 dark:text-white truncate max-w-[180px]">
+                  {profile?.city || 'Freetown'}
                 </strong>
               </div>
             </div>
@@ -237,6 +281,20 @@ export default async function DashboardHubPage() {
                 </div>
                 <ChevronRight className="h-5 w-5 text-zinc-400" />
               </Link>
+            ) : role === 'business' ? (
+              <Link
+                href="/marketplace"
+                className="flex justify-between items-center p-5 rounded-2xl border border-zinc-200/80 bg-white shadow-sm hover:shadow-md hover:border-emerald-500/50 transition-all dark:border-zinc-800/80 dark:bg-zinc-900/40"
+              >
+                <div className="flex items-center gap-3">
+                  <Store className="h-5 w-5 text-emerald-500" />
+                  <div>
+                    <h4 className="font-bold text-sm text-zinc-900 dark:text-white">Marketplace Catalog</h4>
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Post and manage products for sale</p>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-zinc-400" />
+              </Link>
             ) : (
               <Link
                 href="/dashboard/jobs"
@@ -281,7 +339,7 @@ export default async function DashboardHubPage() {
                     <h4 className="font-bold">{notif.title}</h4>
                     <div className="flex items-center gap-2">
                       <Link 
-                        href={role === 'company' ? '/dashboard/jobs' : '/dashboard/applications'}
+                        href={role === 'company' ? '/dashboard/jobs' : role === 'business' ? '/marketplace' : '/dashboard/applications'}
                         className="text-[10px] text-zinc-400 hover:text-emerald-500 font-bold hover:underline transition-colors shrink-0"
                       >
                         View details

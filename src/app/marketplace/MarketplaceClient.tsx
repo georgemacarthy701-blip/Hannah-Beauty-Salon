@@ -94,7 +94,7 @@ export default function MarketplaceClient({ initialProducts, currentUser, isAdmi
           </p>
         </div>
 
-        {currentUser ? (
+        {currentUser && (currentUser.role === 'business' || currentUser.role === 'professional' || isAdmin) ? (
           <button
             onClick={() => setShowAddModal(true)}
             className="flex items-center gap-2 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-5 py-3 text-xs shadow-sm hover:shadow transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer shrink-0"
@@ -102,14 +102,14 @@ export default function MarketplaceClient({ initialProducts, currentUser, isAdmi
             <Plus className="h-4 w-4" />
             <span>Sell a Product</span>
           </button>
-        ) : (
+        ) : !currentUser ? (
           <button
             onClick={() => router.push('/login?redirectTo=/marketplace')}
             className="flex items-center gap-2 rounded-full bg-zinc-850 hover:bg-zinc-800 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-200 font-bold px-5 py-3 text-xs shadow-sm transition-all cursor-pointer shrink-0"
           >
             <span>Sign In to Sell</span>
           </button>
-        )}
+        ) : null}
       </div>
 
       {/* Filter panel */}
