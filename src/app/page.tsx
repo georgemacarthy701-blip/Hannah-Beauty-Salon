@@ -99,11 +99,11 @@ export default async function HomePage() {
       <section className="relative overflow-hidden bg-gradient-to-br from-zinc-900 via-zinc-950 to-emerald-950 text-white rounded-3xl mx-4 sm:mx-6 lg:mx-8 px-6 py-20 md:py-28 shadow-2xl">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.1),transparent_50%)]" />
         <div className="relative mx-auto max-w-4xl text-center space-y-6">
-          <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-tight text-white">
-            Sierra Leone's Premier Talent, Business & Job Platform
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-tight text-white">
+            Sierra Leone&apos;s Premier Talent, Business &amp; Job Platform
           </h1>
-          <p className="text-xl sm:text-3xl font-extrabold text-zinc-300 max-w-3xl mx-auto">
-            Connecting <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">Skills, Businesses</span> & Opportunities
+          <p className="text-lg sm:text-2xl font-bold text-zinc-300 max-w-3xl mx-auto">
+            Connecting <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">Skills, Businesses</span> &amp; Opportunities
           </p>
           <p className="text-zinc-400 max-w-2xl mx-auto text-base sm:text-lg">
             Discover verified local professionals, shop products directly from local businesses, explore career openings, and grow your network in Sierra Leone.

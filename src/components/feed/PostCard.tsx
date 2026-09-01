@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Heart, MessageSquare, Trash2, Send, Loader2 } from 'lucide-react'
 import { toggleLike, addComment, deleteComment, deletePost } from '@/app/actions/posts'
 import { formatImageUrl } from '@/utils/image'
+import FeedImage from './FeedImage'
 
 interface PostCardProps {
   post: any
@@ -189,14 +190,7 @@ export default function PostCard({ post, currentUser, isAdmin, onPostAction }: P
 
       {/* Post media image */}
       {post.image_url && (
-        <div className="rounded-xl border border-zinc-250 dark:border-zinc-850 overflow-hidden bg-zinc-50 dark:bg-zinc-800/10">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={formatImageUrl(post.image_url, { width: 800 })}
-            alt="Post attachment"
-            className="w-full object-cover max-h-96"
-          />
-        </div>
+        <FeedImage src={post.image_url} alt="Post attachment" />
       )}
 
       {/* Counts */}
