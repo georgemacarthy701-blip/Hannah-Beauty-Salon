@@ -1,5 +1,12 @@
 {
-  "version": 2,
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/admin-dashboard", "destination": "/admin-dashboard.html" },
+    { "source": "/admin", "destination": "/admin-dashboard.html" },
+    { "source": "/staff-portal", "destination": "/staff-portal.html" },
+    { "source": "/staff", "destination": "/staff-portal.html" },
+    { "source": "/book", "destination": "/book.html" },
+    { "source": "/login", "destination": "/login.html" }
+  ]
 }
