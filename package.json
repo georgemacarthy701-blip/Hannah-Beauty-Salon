@@ -1,32 +1,17 @@
 {
-  "name": "amazing-hertz",
-  "version": "0.1.0",
+  "name": "hannah-beauty-salon",
+  "version": "1.0.0",
+  "description": "Hannah Beauty Salon Digital Reservation and Operations Management System (OMS)",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "serve . -l 3000",
     "serve": "serve . -l 3000",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "serve . -l 3000"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.12.4",
-    "@supabase/supabase-js": "^2.112.3",
-    "cloudinary": "^2.10.0",
-    "date-fns": "^4.4.0",
-    "lucide-react": "^1.32.0",
-    "next": "16.3.1",
-    "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "@supabase/supabase-js": "^2.48.0"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.3.1",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "serve": "^14.2.4"
   }
 }
