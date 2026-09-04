@@ -2,6 +2,7 @@
   "name": "hannah-beauty-salon",
   "version": "1.0.0",
   "description": "Hannah Beauty Salon Digital Reservation and Operations Management System (OMS)",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "serve . -l 3000",
@@ -9,7 +10,8 @@
     "start": "serve . -l 3000"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.48.0"
+    "@supabase/supabase-js": "^2.48.0",
+    "pg": "^8.23.0"
   },
   "devDependencies": {
     "serve": "^14.2.4"
