@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reserve Your Appointment — Hannah Beauty Salon</title>
+  <meta name="description" content="Book your beauty and salon treatments online with instant slot confirmation.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .booking-wizard-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 2.5rem;
+      align-items: flex-start;
+      margin: 2.5rem 0 5rem;
+    }
+
+    .booking-step-section {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-right: 0.5rem;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .services-booking-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .service-select-card {
+      padding: 1.25rem;
+      cursor: pointer;
+      border: 2px solid var(--border-subtle);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .service-select-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .service-select-card.selected {
+      border-color: var(--primary);
+      background-color: var(--primary-light);
+    }
+
+    .service-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.35rem;
+    }
+
+    .service-name {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .service-price {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .service-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .service-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+
+    .select-indicator {
+      font-weight: 600;
+      color: var(--primary);
+      display: none;
+    }
+
+    .service-select-card.selected .select-indicator {
+      display: inline-block;
+    }
+
+    /* Stylist selection */
+    .stylist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+
+    .stylist-select-card {
+      padding: 1rem;
+      cursor: pointer;
+      border: 2px solid var(--border-subtle);
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .stylist-select-card:hover {
+      border-color: var(--accent);
+    }
+
+    .stylist-select-card.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .stylist-avatar-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      color: var(--accent-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      margin: 0 auto 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    /* Time slots grid */
+    .time-slots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .slot-button {
+      background: #ffffff;
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 0.65rem 0.5rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .slot-button:hover {
+      border-color: var(--accent);
+      background: var(--bg-subtle);
+    }
+
+    .slot-button.selected {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .slot-button.selected .slot-duration {
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .slot-time {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .slot-duration {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Sticky Summary Sidebar */
+    .summary-card {
+      position: sticky;
+      top: 90px;
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .summary-total {
+      border-top: 2px dashed var(--border-subtle);
+      padding-top: 1rem;
+      margin-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    @media (max-width: 900px) {
+      .booking-wizard-layout {
+        grid-template-columns: 1fr;
+      }
+      .summary-card {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-mark">H</div>
+        <div class="brand-name">Hannah <span>Beauty Salon</span></div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#services-section">Services & Pricing</a></li>
+        <li><a href="book.html" class="active">Online Reservation</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-sm btn-outline">Explore Menu</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Booking Wizard Page -->
+  <main class="container">
+    <div style="margin-top: 2.5rem; text-align: center; max-width: 650px; margin-left: auto; margin-right: auto;">
+      <h1 style="font-size: 2.4rem; margin-bottom: 0.5rem;">Online Reservation</h1>
+      <p class="text-sm text-muted">Book your appointment directly as a guest or sign in to link with your account. Conflict-free scheduling with instant confirmation.</p>
+    </div>
+
+    <div class="booking-wizard-layout">
+      <!-- Wizard Steps Column -->
+      <div class="wizard-steps-container">
+
+        <!-- Step 1: Select Service -->
+        <section id="step-services" class="booking-step-section">
+          <div class="step-header">
+            <span class="step-badge">1</span>
+            <h3 class="font-serif" style="font-size: 1.4rem;">Select Service or Treatment</h3>
+          </div>
+          <div id="service-catalog-list">
+            <!-- Dynamically populated -->
+          </div>
+        </section>
+
+        <!-- Step 2: Stylist Selection -->
+        <section id="step-stylist" class="booking-step-section">
+          <div class="step-header">
+            <span class="step-badge">2</span>
+            <h3 class="font-serif" style="font-size: 1.4rem;">Choose Stylist Preference</h3>
+          </div>
+          <div id="staff-selection-list" class="stylist-grid">
+            <!-- Dynamically populated -->
+          </div>
+        </section>
+
+        <!-- Step 3: Date & Time Slot Selection -->
+        <section id="step-datetime" class="booking-step-section">
+          <div class="step-header">
+            <span class="step-badge">3</span>
+            <h3 class="font-serif" style="font-size: 1.4rem;">Select Appointment Date & Time</h3>
+          </div>
+          <div class="form-group" style="max-width: 280px; margin-bottom: 1.5rem;">
+            <label for="booking-date-input" class="form-label">Choose Date</label>
+            <input type="date" id="booking-date-input" class="form-control" required>
+          </div>
+
+          <label class="form-label">Available Time Slots (Calculated in Real-Time)</label>
+          <div id="time-slots-grid" class="time-slots-grid">
+            <p class="text-muted">Please select a service first to view available time slots.</p>
+          </div>
+        </section>
+
+        <!-- Step 4: Client Contact Details -->
+        <section id="step-client" class="booking-step-section">
+          <div class="step-header">
+            <span class="step-badge">4</span>
+            <h3 class="font-serif" style="font-size: 1.4rem;">Contact Information & Notes</h3>
+          </div>
+          <form id="client-details-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="client-name" class="form-label">Full Name *</label>
+                <input type="text" id="client-name" class="form-control" placeholder="e.g. Sophia Williams" required autocomplete="name">
+              </div>
+              <div class="form-group">
+                <label for="client-phone" class="form-label">Phone Number *</label>
+                <input type="tel" id="client-phone" class="form-control" placeholder="e.g. +1 555-019-2834" required autocomplete="tel">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="client-email" class="form-label">Email Address (Optional)</label>
+              <input type="email" id="client-email" class="form-control" placeholder="sophia@example.com" autocomplete="email">
+            </div>
+
+            <div class="form-group">
+              <label for="client-notes" class="form-label">Special Requests or Hair Preferences (Optional)</label>
+              <textarea id="client-notes" class="form-control" rows="3" placeholder="Tell our stylist about any hair textures, inspiration photos, or allergies..."></textarea>
+            </div>
+
+            <button type="submit" id="submit-booking-btn" class="btn btn-primary btn-lg btn-block" style="margin-top: 1rem;">
+              Confirm Reservation
+            </button>
+          </form>
+        </section>
+
+      </div>
+
+      <!-- Live Order Summary Sticky Sidebar -->
+      <aside class="booking-summary-sidebar">
+        <div class="summary-card">
+          <h3 class="font-serif" style="margin-bottom: 1.25rem; font-size: 1.35rem; color: var(--dark);">Booking Summary</h3>
+          
+          <div class="summary-row">
+            <span class="text-muted">Treatment:</span>
+            <strong id="summary-service-name" style="text-align: right;">Select service</strong>
+          </div>
+
+          <div class="summary-row">
+            <span class="text-muted">Estimated Duration:</span>
+            <span id="summary-duration">--</span>
+          </div>
+
+          <div class="summary-row">
+            <span class="text-muted">Stylist:</span>
+            <span id="summary-stylist">Any Available</span>
+          </div>
+
+          <div class="summary-row">
+            <span class="text-muted">Date & Time:</span>
+            <span id="summary-datetime" style="font-weight: 600; color: var(--primary);">Not selected</span>
+          </div>
+
+          <div class="summary-total">
+            <span style="font-weight: 600; font-size: 1.05rem;">Total Price:</span>
+            <span id="summary-price" style="font-size: 1.5rem; font-weight: 700; color: var(--primary); font-family: var(--font-serif);">Le 0.00</span>
+          </div>
+
+          <div style="margin-top: 1.25rem; background: var(--bg-subtle); padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.75rem; color: var(--text-muted);">
+            🔒 Pay securely in salon upon completion of your appointment via Cash, POS Card, or Mobile Transfer.
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Footer with Discreet Staff Access -->
+  <footer class="site-footer" style="padding: 3rem 0 2rem; margin-top: 5rem;">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <div>© 2026 Hannah Beauty Salon. All Rights Reserved.</div>
+        <div><a href="login.html" style="color: #7a7277; font-size: 0.775rem;">Employee Access</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Instant Booking Confirmation Modal -->
+  <div class="modal-backdrop" id="booking-confirmation-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="font-serif" style="margin: 0;">Reservation Receipt</h3>
+        <button class="modal-close" id="close-confirm-modal">&times;</button>
+      </div>
+      <div id="confirm-modal-details">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification System -->
+  <div id="toast-container"></div>
+
+  <!-- Booking Logic Script -->
+  <script type="module" src="js/booking.js"></script>
+</body>
+</html>

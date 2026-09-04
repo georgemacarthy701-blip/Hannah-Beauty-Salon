@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stylist Portal — Hannah Beauty Salon</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body style="visibility: hidden; opacity: 0; transition: opacity 0.2s ease-in;">
+
+  <div class="dashboard-layout">
+    <!-- Stylist Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="brand-logo">
+          <div class="brand-mark" style="width: 32px; height: 32px; font-size: 1.1rem;">H</div>
+          <div class="brand-name" style="font-size: 1.25rem;">Hannah <span>Stylist Portal</span></div>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="sidebar-nav-item active">
+          <span class="icon">✂️</span>
+          <span>My Daily Agenda</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="avatar-circle">S</div>
+          <div class="user-meta">
+            <div class="name" id="staff-portal-name">Stylist</div>
+            <div class="role" id="staff-portal-role">Salon Artist</div>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-outline btn-block" id="staff-logout-btn" style="color: #fff; border-color: rgba(255,255,255,0.2);">
+          Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <div class="dashboard-main">
+      <!-- Topbar -->
+      <header class="dashboard-topbar">
+        <div class="topbar-left">
+          <h2 class="topbar-title font-serif">Stylist Daily Operations</h2>
+        </div>
+        <div class="topbar-actions">
+          <a href="index.html" class="btn btn-secondary btn-sm" target="_blank">
+            🌐 Public Site
+          </a>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+
+        <!-- Stylist KPI Cards -->
+        <section class="metrics-grid">
+          <div class="metric-card">
+            <div>
+              <div class="metric-label">Assigned Today</div>
+              <div class="metric-value" id="stylist-kpi-total">0</div>
+              <div class="metric-sub">Total booked clients</div>
+            </div>
+            <div class="metric-icon-box">📋</div>
+          </div>
+
+          <div class="metric-card success-card">
+            <div>
+              <div class="metric-label">Completed</div>
+              <div class="metric-value" id="stylist-kpi-completed">0</div>
+              <div class="metric-sub">Finished services</div>
+            </div>
+            <div class="metric-icon-box">✓</div>
+          </div>
+
+          <div class="metric-card accent-card">
+            <div>
+              <div class="metric-label">Upcoming / Active</div>
+              <div class="metric-value" id="stylist-kpi-pending">0</div>
+              <div class="metric-sub">In queue or chair</div>
+            </div>
+            <div class="metric-icon-box">⏳</div>
+          </div>
+        </section>
+
+        <!-- Two Column Layout: Daily Appointments & Quick Stock Log -->
+        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem; align-items: flex-start;">
+
+          <!-- Daily Appointments Queue -->
+          <div>
+            <div class="toolbar-card">
+              <div class="filter-group">
+                <label for="staff-schedule-date" class="form-label" style="margin: 0;">Schedule Date:</label>
+                <input type="date" id="staff-schedule-date" class="form-control" style="width: auto;">
+              </div>
+            </div>
+
+            <div id="staff-appointments-list">
+              <!-- Injected via staff.js -->
+            </div>
+          </div>
+
+          <!-- Quick Product / Consumable Deduction Panel -->
+          <div>
+            <div class="card" style="margin-bottom: 1.5rem;">
+              <h3 class="font-serif" style="font-size: 1.25rem; margin-bottom: 0.35rem;">Log Consumables Used</h3>
+              <p class="text-sm text-muted" style="margin-bottom: 1rem;">Tap to deduct supplies used during your treatments to keep salon stock accurate.</p>
+
+              <div id="staff-consumables-quick-list">
+                <!-- Injected via staff.js -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Toast Notification System -->
+  <div id="toast-container"></div>
+
+  <!-- Stylist Script -->
+  <script type="module" src="js/staff.js"></script>
+</body>
+</html>

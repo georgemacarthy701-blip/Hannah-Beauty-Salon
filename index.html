@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hannah Beauty Salon — Luxury Hair, Nails & Spa Care</title>
+  <meta name="description" content="Experience bespoke beauty care, master styling, deluxe nails, and aesthetic facial therapy at Hannah Beauty Salon. Reserve your appointment online.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%200%20100%20100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%239b4b58%22/><text y=%22.72em%22 x=%2250%25%22 text-anchor=%22middle%22 font-size=%2260%22 font-family=%22serif%22 font-weight=%22bold%22 fill=%22white%22>H</text></svg>">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-mark">H</div>
+        <div class="brand-name">Hannah <span>Beauty Salon</span></div>
+      </a>
+
+      <ul class="nav-links" id="main-nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="#services-section">Services & Pricing</a></li>
+        <li><a href="#stylists-section">Our Stylists</a></li>
+        <li><a href="#about-section">About the Salon</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <div id="nav-auth-slot">
+          <a href="book.html" class="btn btn-sm btn-primary">Book Now</a>
+        </div>
+        <button class="mobile-menu-toggle" id="mobile-toggle-btn" aria-label="Toggle Navigation">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" style="background: linear-gradient(180deg, #faf8f5 0%, #f4ede5 100%); padding: 5rem 0 4.5rem; position: relative; overflow: hidden; border-bottom: 1px solid var(--border-subtle);">
+    <div class="container" style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3.5rem; align-items: center;">
+      <div>
+        <span class="badge badge-confirmed" style="margin-bottom: 1rem; font-size: 0.825rem; padding: 0.4rem 0.9rem; background-color: var(--accent-light); color: var(--accent-dark);">Elevating Personal Elegance & Care</span>
+        <h1 style="margin-bottom: 1.25rem;">Timeless Beauty, Bespoke Styling & Luxury Spa.</h1>
+        <p style="font-size: 1.15rem; margin-bottom: 2rem; max-width: 540px;">Hannah Beauty Salon crafts bespoke hairdressing, dimensional color artistry, precision nail care, and restorative aesthetic treatments in a serene atmosphere.</p>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <a href="book.html" class="btn btn-primary btn-lg">Book an Appointment</a>
+          <a href="#services-section" class="btn btn-secondary btn-lg">Explore Catalogue</a>
+        </div>
+      </div>
+      <div style="position: relative;">
+        <div style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); border: 8px solid #ffffff;">
+          <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&auto=format&fit=crop&q=80" alt="Hannah Beauty Salon Interior" style="width: 100%; height: 420px; object-fit: cover;">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Highlights Banner -->
+  <section style="background-color: var(--bg-card); padding: 2.5rem 0; border-bottom: 1px solid var(--border-subtle);">
+    <div class="container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; text-align: center;">
+      <div>
+        <div style="font-size: 1.75rem; margin-bottom: 0.35rem;">🏆</div>
+        <h4 style="margin-bottom: 0.25rem;">Certified Master Stylists</h4>
+        <p class="text-sm">Expert artists dedicated to signature trends and healthy hair.</p>
+      </div>
+      <div>
+        <div style="font-size: 1.75rem; margin-bottom: 0.35rem;">🌿</div>
+        <h4 style="margin-bottom: 0.25rem;">Organic & Premium Products</h4>
+        <p class="text-sm">Formaldehyde-free and vegan formulations for gentle care.</p>
+      </div>
+      <div>
+        <div style="font-size: 1.75rem; margin-bottom: 0.35rem;">⚡</div>
+        <h4 style="margin-bottom: 0.25rem;">Real-Time Conflict-Free Booking</h4>
+        <p class="text-sm">Instant slot confirmation with zero double-booking delays.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services & Treatments Showcase -->
+  <section id="services-section" style="padding: 5rem 0;">
+    <div class="container">
+      <div class="text-center" style="max-width: 680px; margin: 0 auto 3.5rem;">
+        <span class="text-accent font-semibold" style="text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.85rem;">Curated Menu</span>
+        <h2 style="margin-top: 0.5rem; margin-bottom: 1rem;">Signature Treatments & Services</h2>
+        <p>Browse our complete salon catalogue. Select any service to reserve your preferred artist and time slot.</p>
+      </div>
+
+      <div id="homepage-services-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.75rem;">
+        <!-- Dynamically rendered via ES module -->
+        <div class="card" style="text-align: center; padding: 2rem;"><p>Loading salon catalogue...</p></div>
+      </div>
+
+      <div class="text-center" style="margin-top: 3.5rem;">
+        <a href="book.html" class="btn btn-primary btn-lg">View Full Schedule & Book Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stylists & Team Section -->
+  <section id="stylists-section" style="background-color: var(--bg-subtle); padding: 5rem 0; border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+    <div class="container">
+      <div class="text-center" style="max-width: 680px; margin: 0 auto 3.5rem;">
+        <span class="text-accent font-semibold" style="text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.85rem;">Artistry & Passion</span>
+        <h2 style="margin-top: 0.5rem; margin-bottom: 1rem;">Meet Our Resident Stylists</h2>
+        <p>Our experienced team blends technical mastery with tailored consultations to bring your aesthetic vision to life.</p>
+      </div>
+
+      <div id="homepage-stylists-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
+        <!-- Dynamically filled -->
+      </div>
+    </div>
+  </section>
+
+  <!-- About Salon Section -->
+  <section id="about-section" style="padding: 5rem 0;">
+    <div class="container" style="display: grid; grid-template-columns: 1fr 1.1fr; gap: 3.5rem; align-items: center;">
+      <div style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md);">
+        <img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=800&auto=format&fit=crop&q=80" alt="Salon experience" style="width: 100%; height: 380px; object-fit: cover;">
+      </div>
+      <div>
+        <span class="text-accent font-semibold" style="text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.85rem;">The Hannah Experience</span>
+        <h2 style="margin-top: 0.5rem; margin-bottom: 1.25rem;">Crafted for Relaxation, Styled for Confidence.</h2>
+        <p style="margin-bottom: 1rem;">Founded with a passion for excellence, Hannah Beauty Salon offers a tranquil sanctuary where clients receive dedicated, unhurried care. Our digital reservation system ensures smooth scheduling, transparent pricing, and direct communication.</p>
+        <p style="margin-bottom: 1.75rem;">From nourishing botanical hair therapies and master color blending to rejuvenating facials and gel nail spa sessions, we prioritize your wellness at every step.</p>
+        <a href="book.html" class="btn btn-outline">Schedule a Visit</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="brand-logo" style="margin-bottom: 1rem;">
+            <div class="brand-mark" style="background: #ffffff; color: var(--primary);">H</div>
+            <div class="brand-name" style="color: #ffffff;">Hannah <span>Beauty Salon</span></div>
+          </div>
+          <p style="color: #c5beba; font-size: 0.9rem; max-width: 300px;">Integrated digital reservation and operations management system for refined salon and spa experiences.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Client Menu</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="book.html">Book Online</a></li>
+            <li><a href="#services-section">Services & Pricing</a></li>
+            <li><a href="#stylists-section">Stylist Roster</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Hours & Location</h4>
+          <p style="color: #c5beba; font-size: 0.9rem; margin-bottom: 0.5rem;">📍 142 Luxury Blvd, Suite 300</p>
+          <p style="color: #c5beba; font-size: 0.9rem; margin-bottom: 0.5rem;">📞 +1 (555) 234-5678</p>
+          <p style="color: #c5beba; font-size: 0.9rem;">🕒 Mon – Sat: 09:00 AM – 06:00 PM</p>
+        </div>
+        <div class="footer-col">
+          <h4>Management</h4>
+          <ul>
+            <li><a href="login.html" style="color: #9a9096; font-size: 0.85rem;">🔒 Staff & Admin Portal</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Hannah Beauty Salon. All Rights Reserved.</div>
+        <div><a href="login.html" style="color: #7a7277; font-size: 0.775rem;">Employee Access</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Landing Page ES Module Script -->
+  <script type="module">
+    import { db } from './js/supabaseClient.js';
+    import { SALON_CONFIG, formatCurrency } from './js/config.js';
+    import './js/auth.js';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Mobile menu toggle
+      const mobileBtn = document.getElementById('mobile-toggle-btn');
+      const navLinks = document.getElementById('main-nav-links');
+      mobileBtn?.addEventListener('click', () => {
+        navLinks?.classList.toggle('mobile-open');
+      });
+
+      // Load services & stylists
+      try {
+        const [services, staff] = await Promise.all([
+          db.getServices(true),
+          db.getStaff(true)
+        ]);
+
+        // Render Services
+        const srvGrid = document.getElementById('homepage-services-grid');
+        if (srvGrid && services.length > 0) {
+          srvGrid.innerHTML = '';
+          services.slice(0, 6).forEach(srv => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.style.display = 'flex';
+            card.style.flexDirection = 'column';
+            card.style.justifyContent = 'space-between';
+
+            card.innerHTML = `
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
+                  <span class="badge badge-confirmed">${srv.category || 'Treatment'}</span>
+                  <strong style="color: var(--primary); font-size: 1.25rem;">${formatCurrency(srv.price)}</strong>
+                </div>
+                <h3 class="font-serif" style="font-size: 1.35rem; margin-bottom: 0.5rem;">${srv.name}</h3>
+                <p class="text-sm text-muted" style="margin-bottom: 1rem;">${srv.description || 'Custom professional beauty service.'}</p>
+              </div>
+              <div style="border-top: 1px solid var(--border-subtle); padding-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                <span class="text-sm font-semibold" style="color: var(--text-muted);">⏱️ ${srv.duration_minutes} Mins</span>
+                <a href="book.html?service=${srv.id}" class="btn btn-sm btn-outline">Book This</a>
+              </div>
+            `;
+            srvGrid.appendChild(card);
+          });
+        }
+
+        // Render Stylists
+        const stGrid = document.getElementById('homepage-stylists-grid');
+        if (stGrid) {
+          if (staff.length === 0) {
+            stGrid.innerHTML = '<p class="text-muted text-center" style="grid-column: 1/-1;">Our master stylists will appear here soon.</p>';
+          } else {
+            stGrid.innerHTML = '';
+            staff.forEach(st => {
+              const initials = (st.full_name || 'Staff')
+                .split(' ')
+                .filter(Boolean)
+                .map(n => n[0])
+                .join('')
+                .substring(0, 2)
+                .toUpperCase();
+
+              const shiftStart = st.shift_start ? st.shift_start.substring(0, 5) : '09:00';
+              const shiftEnd = st.shift_end ? st.shift_end.substring(0, 5) : '18:00';
+
+              const card = document.createElement('div');
+              card.className = 'card text-center';
+              card.style.display = 'flex';
+              card.style.flexDirection = 'column';
+              card.style.justifyContent = 'space-between';
+              card.innerHTML = `
+                <div>
+                  <div style="width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-family: var(--font-serif); margin: 0 auto 1rem; font-weight: 700; box-shadow: var(--shadow-sm);">
+                    ${initials}
+                  </div>
+                  <h4 class="font-serif" style="font-size: 1.25rem; margin-bottom: 0.25rem;">${st.full_name}</h4>
+                  <p class="text-sm text-accent" style="font-weight: 600; margin-bottom: 0.5rem;">${st.role_title || 'Resident Stylist'}</p>
+                  <p class="text-sm text-muted" style="margin-bottom: 0.5rem;">🕒 Working Hours: <strong>${shiftStart} – ${shiftEnd}</strong></p>
+                </div>
+                <div style="border-top: 1px solid var(--border-subtle); padding-top: 0.85rem; margin-top: 0.85rem;">
+                  <a href="book.html" class="btn btn-sm btn-outline btn-block">Book an Appointment</a>
+                </div>
+              `;
+              stGrid.appendChild(card);
+            });
+          }
+        }
+      } catch (err) {
+        console.error('Homepage load error:', err);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Operations Portal (OMS) — Hannah Beauty Salon</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body style="visibility: hidden; opacity: 0; transition: opacity 0.2s ease-in;">
+
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="admin-sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="brand-logo">
+          <div class="brand-mark" style="width: 32px; height: 32px; font-size: 1.1rem;">H</div>
+          <div class="brand-name" style="font-size: 1.25rem;">Hannah <span>OMS Console</span></div>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="sidebar-nav-item active" data-tab="agenda">
+          <span class="icon">📅</span>
+          <span>Daily Schedule</span>
+        </button>
+        <button class="sidebar-nav-item" data-tab="services">
+          <span class="icon">📋</span>
+          <span>Service Catalog</span>
+        </button>
+        <button class="sidebar-nav-item" data-tab="inventory">
+          <span class="icon">📦</span>
+          <span>Inventory & Stock</span>
+        </button>
+        <button class="sidebar-nav-item" data-tab="billing">
+          <span class="icon">💳</span>
+          <span>Billing & Revenue</span>
+        </button>
+        <button class="sidebar-nav-item" data-tab="staff">
+          <span class="icon">✂️</span>
+          <span>Stylists & Staff</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="avatar-circle">H</div>
+          <div class="user-meta">
+            <div class="name" id="admin-user-name">Administrator</div>
+            <div class="role" id="admin-user-role">Salon Admin</div>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-outline btn-block" id="admin-logout-btn" style="color: #fff; border-color: rgba(255,255,255,0.2);">
+          Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Canvas -->
+    <div class="dashboard-main">
+      <!-- Topbar -->
+      <header class="dashboard-topbar">
+        <div class="topbar-left">
+          <h2 class="topbar-title font-serif" id="dashboard-view-title">Daily Schedule & Agenda</h2>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-primary btn-sm" id="open-walkin-modal-btn">
+            <span>+</span> Register Walk-In
+          </button>
+          <a href="index.html" class="btn btn-secondary btn-sm" target="_blank" title="Preview Public Site">
+            🌐 View Public Site
+          </a>
+        </div>
+      </header>
+
+      <!-- Dashboard Workspace -->
+      <main class="dashboard-content">
+
+        <!-- Operational KPI Summary Metrics -->
+        <section class="metrics-grid">
+          <div class="metric-card">
+            <div>
+              <div class="metric-label">Today's Bookings</div>
+              <div class="metric-value" id="kpi-today-bookings">--</div>
+              <div class="metric-sub">Online & Walk-in active</div>
+            </div>
+            <div class="metric-icon-box">📅</div>
+          </div>
+
+          <div class="metric-card accent-card">
+            <div>
+              <div class="metric-label">Active Stylists</div>
+              <div class="metric-value" id="kpi-active-staff">--</div>
+              <div class="metric-sub">On duty today</div>
+            </div>
+            <div class="metric-icon-box">✂️</div>
+          </div>
+
+          <div class="metric-card" id="kpi-low-stock-card">
+            <div>
+              <div class="metric-label">Low Stock Alerts</div>
+              <div class="metric-value" id="kpi-low-stock">--</div>
+              <div class="metric-sub">Below safety threshold</div>
+            </div>
+            <div class="metric-icon-box">⚠️</div>
+          </div>
+
+          <div class="metric-card success-card">
+            <div>
+              <div class="metric-label">Today's Revenue</div>
+              <div class="metric-value" id="kpi-today-revenue">Le 0.00</div>
+              <div class="metric-sub">Closed transactions</div>
+            </div>
+            <div class="metric-icon-box">💰</div>
+          </div>
+        </section>
+
+        <!-- TAB 1: DAILY AGENDA & SCHEDULE -->
+        <div class="tab-content active" id="tab-agenda">
+          <div class="toolbar-card">
+            <div class="filter-group">
+              <label for="agenda-date-filter" class="form-label" style="margin: 0;">Date:</label>
+              <input type="date" id="agenda-date-filter" class="form-control" style="width: auto;">
+
+              <label for="agenda-staff-filter" class="form-label" style="margin: 0; margin-left: 0.5rem;">Stylist:</label>
+              <select id="agenda-staff-filter" class="form-control" style="width: auto;">
+                <option value="">All Stylists</option>
+              </select>
+
+              <label for="agenda-status-filter" class="form-label" style="margin: 0; margin-left: 0.5rem;">Status:</label>
+              <select id="agenda-status-filter" class="form-control" style="width: auto;">
+                <option value="">All Statuses</option>
+                <option value="pending">Pending</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Time Slot</th>
+                  <th>Client</th>
+                  <th>Service</th>
+                  <th>Assigned Stylist</th>
+                  <th>Origin</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="agenda-table-body">
+                <!-- Injected via admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 2: SERVICE CATALOG -->
+        <div class="tab-content" id="tab-services">
+          <div class="toolbar-card">
+            <div>
+              <h3 class="font-serif" style="font-size: 1.25rem;">Salon Service Offerings</h3>
+              <p class="text-sm text-muted">Manage treatment descriptions, durations, and pricing displayed on booking engine.</p>
+            </div>
+            <button class="btn btn-primary btn-sm" id="open-service-modal-btn">+ Add New Service</button>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Service Name</th>
+                  <th>Category</th>
+                  <th>Duration</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="services-table-body">
+                <!-- Injected via admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 3: INVENTORY & STOCK -->
+        <div class="tab-content" id="tab-inventory">
+          <div class="toolbar-card">
+            <div>
+              <h3 class="font-serif" style="font-size: 1.25rem;">Consumables & Products Ledger</h3>
+              <p class="text-sm text-muted">Track on-hand stock of hair dyes, shampoos, and supplies. Auto-flags below minimum threshold.</p>
+            </div>
+            <button class="btn btn-primary btn-sm" id="open-inventory-modal-btn">+ Register Stock Item</button>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Item Name</th>
+                  <th>Current Stock</th>
+                  <th>Safety Threshold</th>
+                  <th>Status Flag</th>
+                  <th>Last Updated</th>
+                  <th>Quick Adjustment</th>
+                </tr>
+              </thead>
+              <tbody id="inventory-table-body">
+                <!-- Injected via admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 4: BILLING & REVENUE RECONCILIATION -->
+        <div class="tab-content" id="tab-billing">
+          <div class="toolbar-card">
+            <div class="filter-group">
+              <label for="billing-date-filter" class="form-label" style="margin: 0;">Reconciliation Date:</label>
+              <input type="date" id="billing-date-filter" class="form-control" style="width: auto;">
+            </div>
+          </div>
+
+          <!-- Channel Totals Breakdown Card -->
+          <div class="revenue-breakdown-card">
+            <div class="breakdown-box">
+              <div class="channel-name">Cash Drawer</div>
+              <div class="channel-amount" id="reconcile-cash">Le 0.00</div>
+            </div>
+            <div class="breakdown-box">
+              <div class="channel-name">POS / Card Terminal</div>
+              <div class="channel-amount" id="reconcile-card">Le 0.00</div>
+            </div>
+            <div class="breakdown-box">
+              <div class="channel-name">Mobile Money / Transfer</div>
+              <div class="channel-amount" id="reconcile-transfer">Le 0.00</div>
+            </div>
+            <div class="breakdown-box" style="border-left-color: var(--primary);">
+              <div class="channel-name" style="color: var(--primary);">Total Reconciled Takings</div>
+              <div class="channel-amount" id="reconcile-grand-total" style="color: var(--primary);">Le 0.00</div>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Client</th>
+                  <th>Treatment</th>
+                  <th>Channel</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="billing-table-body">
+                <!-- Injected via admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 5: STYLISTS & STAFF MANAGEMENT -->
+        <div class="tab-content" id="tab-staff">
+          <div class="toolbar-card">
+            <div>
+              <h3 class="font-serif" style="font-size: 1.25rem;">Stylist & Staff Roster</h3>
+              <p class="text-sm text-muted">Manage resident stylists, service specialties, shift schedules, and operational availability.</p>
+            </div>
+            <button class="btn btn-primary btn-sm" id="open-stylist-modal-btn">+ Add New Stylist</button>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Stylist</th>
+                  <th>Role & Specialty</th>
+                  <th>Working Shifts</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="staff-table-body">
+                <!-- Injected via admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- MODAL: Walk-In Registration -->
+  <div class="modal-backdrop" id="walkin-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="font-serif" style="margin: 0;">Register Walk-In Client</h3>
+        <button class="modal-close" id="close-walkin-modal">&times;</button>
+      </div>
+      <form id="walkin-form">
+        <div class="form-group">
+          <label for="walkin-name" class="form-label">Client Name *</label>
+          <input type="text" id="walkin-name" class="form-control" placeholder="Walk-in Client Name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="walkin-phone" class="form-label">Phone Number *</label>
+          <input type="tel" id="walkin-phone" class="form-control" placeholder="+1 555-000-0000" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="walkin-service-select" class="form-label">Requested Treatment *</label>
+            <select id="walkin-service-select" class="form-control" required></select>
+          </div>
+          <div class="form-group">
+            <label for="walkin-staff-select" class="form-label">Assign Stylist *</label>
+            <select id="walkin-staff-select" class="form-control" required></select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="walkin-date" class="form-label">Date *</label>
+            <input type="date" id="walkin-date" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="walkin-start-time" class="form-label">Start Time *</label>
+            <input type="time" id="walkin-start-time" class="form-control" value="10:00" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 1rem;">
+          Add to Operational Schedule
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Add Service -->
+  <div class="modal-backdrop" id="service-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="font-serif" style="margin: 0;">New Service Offering</h3>
+        <button class="modal-close" id="close-service-modal">&times;</button>
+      </div>
+      <form id="service-form">
+        <div class="form-group">
+          <label for="service-name-inp" class="form-label">Service Name *</label>
+          <input type="text" id="service-name-inp" class="form-control" required placeholder="e.g. Scalp Detox Ritual">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="service-category-inp" class="form-label">Category</label>
+            <input type="text" id="service-category-inp" class="form-control" value="Hair Treatments">
+          </div>
+          <div class="form-group">
+            <label for="service-duration-inp" class="form-label">Duration (Minutes) *</label>
+            <input type="number" id="service-duration-inp" class="form-control" value="45" min="15" step="15" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="service-price-inp" class="form-label">Price (Le) *</label>
+          <input type="number" id="service-price-inp" class="form-control" value="50.00" min="0" step="0.5" required>
+        </div>
+
+        <div class="form-group">
+          <label for="service-desc-inp" class="form-label">Description</label>
+          <textarea id="service-desc-inp" class="form-control" rows="2"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Save Service</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Edit Service -->
+  <div class="modal-backdrop" id="edit-service-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="font-serif" style="margin: 0;">Edit Service Offering</h3>
+        <button class="modal-close" id="close-edit-service-modal">&times;</button>
+      </div>
+      <form id="edit-service-form">
+        <input type="hidden" id="edit-service-id">
+
+        <div class="form-group">
+          <label for="edit-service-name" class="form-label">Service Name *</label>
+          <input type="text" id="edit-service-name" class="form-control" required placeholder="Service Name">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-service-category" class="form-label">Category</label>
+            <input type="text" id="edit-service-category" class="form-control" placeholder="e.g. Hair, Nails, Skincare">
+          </div>
+          <div class="form-group">
+            <label for="edit-service-duration" class="form-label">Duration (Minutes) *</label>
+            <input type="number" id="edit-service-duration" class="form-control" min="5" step="5" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-service-price" class="form-label">Price (Le) *</label>
+            <input type="number" id="edit-service-price" class="form-control" min="0" step="0.01" required>
+          </div>
+          <div class="form-group" style="justify-content: center;">
+            <label class="form-label" style="margin-bottom: 0.5rem;">Service Status</label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem; margin-top: 0.25rem;">
+              <input type="checkbox" id="edit-service-active" style="width: 18px; height: 18px; accent-color: var(--primary);">
+              <span style="font-weight: 600;">Active in Booking Menu</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="edit-service-desc" class="form-label">Description</label>
+          <textarea id="edit-service-desc" class="form-control" rows="3" placeholder="Treatment details and client guidance..."></textarea>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary btn-block" id="cancel-edit-service-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-block" id="save-edit-service-btn">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Add Inventory Item -->
+  <div class="modal-backdrop" id="inventory-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="font-serif" style="margin: 0;">Register Inventory Consumable</h3>
+        <button class="modal-close" id="close-inventory-modal">&times;</button>
+      </div>
+      <form id="inventory-form">
+        <div class="form-group">
+          <label for="inv-name-inp" class="form-label">Product / Item Name *</label>
+          <input type="text" id="inv-name-inp" class="form-control" required placeholder="e.g. Organic Blonde Developer 30 Vol">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="inv-category-inp" class="form-label">Category</label>
+            <input type="text" id="inv-category-inp" class="form-control" value="Coloring">
+          </div>
+          <div class="form-group">
+            <label for="inv-unit-inp" class="form-label">Unit of Measure</label>
+            <input type="text" id="inv-unit-inp" class="form-control" value="bottles">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="inv-stock-inp" class="form-label">Initial Stock Count *</label>
+            <input type="number" id="inv-stock-inp" class="form-control" value="10" min="0" required>
+          </div>
+          <div class="form-group">
+            <label for="inv-threshold-inp" class="form-label">Low-Stock Alert Threshold *</label>
+            <input type="number" id="inv-threshold-inp" class="form-control" value="4" min="1" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Add to Inventory</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Record Payment -->
+  <div class="modal-backdrop" id="payment-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="font-serif" style="margin: 0;">Record Client Payment</h3>
+        <button class="modal-close" id="close-payment-modal">&times;</button>
+      </div>
+      <form id="payment-form">
+        <div style="background: var(--bg-subtle); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1.25rem;">
+          <div>Client: <strong id="pay-client-name">--</strong></div>
+          <div>Treatment: <span id="pay-service-name">--</span></div>
+        </div>
+
+        <div class="form-group">
+          <label for="pay-amount-input" class="form-label">Amount Paid (Le) *</label>
+          <input type="number" id="pay-amount-input" class="form-control" step="0.01" min="0" required>
+        </div>
+
+        <div class="form-group">
+          <label for="pay-method-select" class="form-label">Payment Channel *</label>
+          <select id="pay-method-select" class="form-control" required>
+            <option value="pos_card">POS / Card Terminal</option>
+            <option value="cash">Cash in Drawer</option>
+            <option value="mobile_transfer">Mobile Money / Bank Transfer</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="pay-notes-input" class="form-label">Notes (Optional)</label>
+          <input type="text" id="pay-notes-input" class="form-control" placeholder="Transaction receipt ref / note">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg">
+          Complete & Close Billing
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Add / Edit Stylist -->
+  <div class="modal-backdrop" id="stylist-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="font-serif" id="stylist-modal-title" style="margin: 0;">Add New Stylist</h3>
+        <button class="modal-close" id="close-stylist-modal">&times;</button>
+      </div>
+      <form id="stylist-form">
+        <input type="hidden" id="staff-id-inp">
+
+        <div class="form-group">
+          <label for="staff-name-inp" class="form-label">Full Name *</label>
+          <input type="text" id="staff-name-inp" class="form-control" required placeholder="e.g. Hannah Mensah">
+        </div>
+
+        <div class="form-group">
+          <label for="staff-role-inp" class="form-label">Role Title / Specialty *</label>
+          <input type="text" id="staff-role-inp" class="form-control" required placeholder="e.g. Master Colorist, Lead Braider">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="staff-shift-start" class="form-label">Shift Start Time</label>
+            <input type="time" id="staff-shift-start" class="form-control" value="09:00" required>
+          </div>
+          <div class="form-group">
+            <label for="staff-shift-end" class="form-label">Shift End Time</label>
+            <input type="time" id="staff-shift-end" class="form-control" value="18:00" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 0.5rem;">
+          <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
+            <input type="checkbox" id="staff-active-inp" checked style="width: 18px; height: 18px; accent-color: var(--primary);">
+            <span style="font-weight: 600;">Active Stylist (Available for Online Bookings)</span>
+          </label>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary btn-block" id="cancel-stylist-modal-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-block" id="save-stylist-btn">Save Stylist</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Admin Module Script -->
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

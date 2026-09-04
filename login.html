@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff & Admin Sign In — Hannah Beauty Salon</title>
+  <meta name="description" content="Authorized Staff and Administrator Portal Sign In for Hannah Beauty Salon.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%200%20100%20100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%239b4b58%22/><text y=%22.72em%22 x=%2250%25%22 text-anchor=%22middle%22 font-size=%2260%22 font-family=%22serif%22 font-weight=%22bold%22 fill=%22white%22>H</text></svg>">
+  <style>
+    .auth-page-wrapper {
+      min-height: calc(100vh - 80px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+      background: linear-gradient(180deg, #faf8f5 0%, #f4ede5 100%);
+    }
+
+    .auth-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-subtle);
+      width: 100%;
+      max-width: 440px;
+      padding: 2.5rem;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .auth-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: var(--radius-full);
+      background-color: var(--accent-light);
+      color: var(--accent-dark);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+
+    .auth-error-banner {
+      display: none;
+      background-color: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      margin-bottom: 1.25rem;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-mark">H</div>
+        <div class="brand-name">Hannah <span>Beauty Salon</span></div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="book.html">Book Online</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="book.html" class="btn btn-sm btn-primary">Book an Appointment</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Auth Main Container -->
+  <main class="auth-page-wrapper">
+    <div class="auth-card">
+      <div class="text-center" style="margin-bottom: 2rem;">
+        <span class="auth-badge">🔒 Back-Office Console</span>
+        <h2 class="font-serif" style="font-size: 1.85rem; margin-bottom: 0.35rem;">Hannah Salon Management Portal</h2>
+        <p class="text-sm text-muted">Authorized Staff & Administrator Access</p>
+      </div>
+
+      <!-- Live Error Banner -->
+      <div class="auth-error-banner" id="auth-error-box"></div>
+
+      <!-- Staff & Admin Login Form -->
+      <form id="signin-form">
+        <div class="form-group">
+          <label for="signin-email" class="form-label">Email Address</label>
+          <input type="email" id="signin-email" class="form-control" placeholder="staff@hannahbeautysalon.com" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label for="signin-password" class="form-label">Password</label>
+          <input type="password" id="signin-password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" id="signin-submit-btn" class="btn btn-primary btn-block btn-lg" style="margin-top: 1.25rem;">
+          Sign In
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-subtle); padding-top: 1rem;">
+        Looking to book a treatment? <a href="book.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Book Online as Guest</a>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast-container"></div>
+
+  <!-- Staff/Admin Auth Script -->
+  <script type="module">
+    import { auth, showToast } from './js/auth.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const formSignIn = document.getElementById('signin-form');
+      const errorBox = document.getElementById('auth-error-box');
+
+      // Check URL for unauthorized error flag
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('error') === 'unauthorized') {
+        displayError('Access denied: Your account does not have staff or administrator privileges.');
+      }
+
+      function displayError(msg) {
+        if (errorBox) {
+          errorBox.textContent = msg;
+          errorBox.style.display = 'block';
+        }
+      }
+
+      function clearError() {
+        if (errorBox) {
+          errorBox.textContent = '';
+          errorBox.style.display = 'none';
+        }
+      }
+
+      formSignIn?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearError();
+
+        const email = document.getElementById('signin-email').value.trim();
+        const password = document.getElementById('signin-password').value;
+
+        const btn = document.getElementById('signin-submit-btn');
+        btn.disabled = true;
+        btn.textContent = 'Verifying Credentials...';
+
+        try {
+          const user = await auth.signIn(email, password);
+          showToast('Welcome back!', `Signed in as ${user.full_name}`, 'success');
+
+          // Dynamic redirection strictly for staff & admin
+          const redirect = urlParams.get('redirect');
+          if (redirect && !redirect.includes('login.html')) {
+            if (redirect.includes('admin') && user.role !== 'admin') {
+              window.location.href = 'staff-portal.html';
+            } else {
+              window.location.href = redirect;
+            }
+            return;
+          }
+
+          if (user.role === 'admin') {
+            window.location.href = 'admin-dashboard.html';
+          } else if (user.role === 'staff') {
+            window.location.href = 'staff-portal.html';
+          }
+        } catch (err) {
+          console.error('[Login Error]:', err);
+          displayError(err.message || 'Invalid email or password.');
+          btn.disabled = false;
+          btn.textContent = 'Sign In';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
