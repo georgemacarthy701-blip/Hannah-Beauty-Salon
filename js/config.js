@@ -11,9 +11,9 @@ export const SUPABASE_ANON_KEY = 'sb_publishable_wNzmxDrl2w0KmlU1FWu5BA_czjgv-fy
 export const SALON_CONFIG = {
   name: 'Hannah Beauty Salon',
   tagline: 'Luxury Hair, Nails & Aesthetic Spa Care',
-  phone: '+1 (555) 234-5678',
+  phone: '+232 80 878918',
   email: 'appointments@hannahbeautysalon.com',
-  address: '142 Luxury Boulevard, Suite 300, Beverly Hills, CA',
+  address: '29 Aberdeen Road',
   openingHour: '09:00',
   closingHour: '18:00',
   slotIntervalMinutes: 30, // 30-minute booking step intervals
