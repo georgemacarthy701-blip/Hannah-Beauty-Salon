@@ -3,9 +3,9 @@
  * Daily Agenda, Walk-In Registration, Service Catalog CRUD, Consumable Inventory, and Daily Revenue Reconciliation.
  */
 
-import { db } from './supabaseClient.js';
+import { supabase, db } from './supabaseClient.js';
 import { auth, showToast } from './auth.js';
-import { SALON_CONFIG, formatCurrency } from './config.js';
+import { SUPABASE_URL, SUPABASE_ANON_KEY, SALON_CONFIG, formatCurrency } from './config.js';
 
 let currentAdminUser = null;
 let activeServices = [];
@@ -29,11 +29,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Logout button
   document.getElementById('admin-logout-btn')?.addEventListener('click', () => auth.signOut());
 
-  // Set default dates
+  // Set billing default date (keep agenda date open by default to display all bookings)
   const todayStr = new Date().toISOString().split('T')[0];
-  const agendaDateInp = document.getElementById('agenda-date-filter');
   const billingDateInp = document.getElementById('billing-date-filter');
-  if (agendaDateInp) agendaDateInp.value = todayStr;
   if (billingDateInp) billingDateInp.value = todayStr;
 
   // Initialize tabs & listeners
@@ -177,18 +175,38 @@ async function loadAgenda() {
   const tableBody = document.getElementById('agenda-table-body');
   if (!tableBody) return;
 
-  const dateFilter = document.getElementById('agenda-date-filter')?.value || new Date().toISOString().split('T')[0];
-  const staffFilter = document.getElementById('agenda-staff-filter')?.value || '';
-  const statusFilter = document.getElementById('agenda-status-filter')?.value || '';
+  const dateFilter = document.getElementById('agenda-date-filter')?.value;
+  const staffFilter = document.getElementById('agenda-staff-filter')?.value;
+  const statusFilter = document.getElementById('agenda-status-filter')?.value;
 
-  tableBody.innerHTML = '<tr><td colspan="7" class="text-center" style="padding: 2rem;">Loading daily agenda...</td></tr>';
+  tableBody.innerHTML = '<tr><td colspan="7" class="text-center" style="padding: 2rem;">Loading bookings...</td></tr>';
 
   try {
-    const appointments = await db.getAppointments({
-      date: dateFilter,
-      staff_id: staffFilter || undefined,
-      status: statusFilter || undefined
-    });
+    let query = supabase
+      .from('appointments')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (dateFilter) {
+      query = query.eq('appointment_date', dateFilter);
+    }
+    if (staffFilter) {
+      query = query.eq('staff_id', staffFilter);
+    }
+    if (statusFilter) {
+      query = query.eq('status', statusFilter);
+    }
+
+    const { data, error } = await query;
+    console.log('Fetched appointments:', data, 'Error:', error);
+
+    if (error) {
+      console.error('Agenda loading error from Supabase:', error);
+      tableBody.innerHTML = `<tr><td colspan="7" class="text-danger text-center">Failed to load bookings: ${error.message}</td></tr>`;
+      return;
+    }
+
+    const appointments = data || [];
 
     if (appointments.length === 0) {
       tableBody.innerHTML = `
@@ -196,8 +214,8 @@ async function loadAgenda() {
           <td colspan="7">
             <div class="empty-state">
               <div class="empty-state-icon">📅</div>
-              <div class="empty-state-title">No appointments scheduled</div>
-              <p class="text-sm">There are no bookings matching the selected date and filters.</p>
+              <div class="empty-state-title">No appointments found</div>
+              <p class="text-sm">There are no bookings matching the current filters.</p>
             </div>
           </td>
         </tr>
@@ -208,26 +226,30 @@ async function loadAgenda() {
     tableBody.innerHTML = '';
 
     appointments.forEach(apt => {
+      // Find service and stylist details from local catalog
+      const service = activeServices.find(s => s.id === apt.service_id) || apt.service || {};
+      const staff = staffMembers.find(st => st.id === apt.staff_id) || apt.staff || {};
+
       const tr = document.createElement('tr');
-      const startFmt = apt.start_time.substring(0, 5);
-      const endFmt = apt.end_time.substring(0, 5);
+      const startFmt = (apt.start_time || '09:00:00').substring(0, 5);
+      const endFmt = (apt.end_time || '10:00:00').substring(0, 5);
       const isWalkIn = (apt.origin === 'walk_in');
 
       tr.innerHTML = `
         <td>
           <strong>${startFmt} - ${endFmt}</strong>
-          <div class="text-sm text-muted">${apt.appointment_date}</div>
+          <div class="text-sm text-muted">${apt.appointment_date || 'N/A'}</div>
         </td>
         <td>
-          <div style="font-weight: 600; color: var(--dark);">${apt.client_name}</div>
-          <div class="text-sm text-muted">${apt.client_phone}</div>
+          <div style="font-weight: 600; color: var(--dark);">${apt.client_name || 'Guest Client'}</div>
+          <div class="text-sm text-muted">${apt.client_phone || 'N/A'}</div>
         </td>
         <td>
-          <div>${apt.service?.name || 'Custom Care'}</div>
-          <div class="text-sm text-muted">${apt.service?.duration_minutes || 45} mins • ${formatCurrency(apt.service?.price || 0)}</div>
+          <div>${service.name || 'Salon Treatment'}</div>
+          <div class="text-sm text-muted">${service.duration_minutes || 45} mins • ${formatCurrency(service.price || 0)}</div>
         </td>
         <td>
-          <strong>${apt.staff?.full_name || 'Unassigned'}</strong>
+          <strong>${staff.full_name || 'Unassigned / Any'}</strong>
         </td>
         <td>
           <span class="badge ${isWalkIn ? 'badge-confirmed' : 'badge-pending'}" style="font-size: 0.7rem;">
@@ -235,7 +257,7 @@ async function loadAgenda() {
           </span>
         </td>
         <td>
-          <select class="status-select ${apt.status}" data-id="${apt.id}">
+          <select class="status-select ${apt.status || 'pending'}" data-id="${apt.id}">
             <option value="pending" ${apt.status === 'pending' ? 'selected' : ''}>Pending</option>
             <option value="confirmed" ${apt.status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
             <option value="in_progress" ${apt.status === 'in_progress' ? 'selected' : ''}>In Progress</option>
@@ -246,7 +268,7 @@ async function loadAgenda() {
         <td>
           <div class="table-actions">
             ${apt.status !== 'completed' && apt.status !== 'cancelled' ? `
-              <button class="btn btn-sm btn-primary pay-btn" data-id="${apt.id}" data-price="${apt.service?.price || 0}" data-client="${apt.client_name}" data-service="${apt.service?.name || ''}">
+              <button class="btn btn-sm btn-primary pay-btn" data-id="${apt.id}" data-price="${service.price || 0}" data-client="${apt.client_name || ''}" data-service="${service.name || ''}">
                 💳 Pay
               </button>
             ` : ''}
@@ -271,14 +293,14 @@ async function loadAgenda() {
       // Payment Trigger
       const payBtn = tr.querySelector('.pay-btn');
       payBtn?.addEventListener('click', () => {
-        openPaymentModal(apt);
+        openPaymentModal({ ...apt, service, staff });
       });
 
       tableBody.appendChild(tr);
     });
   } catch (err) {
     console.error('Agenda loading error:', err);
-    tableBody.innerHTML = '<tr><td colspan="7" class="text-danger text-center">Failed to load agenda.</td></tr>';
+    tableBody.innerHTML = `<tr><td colspan="7" class="text-danger text-center">Failed to load agenda: ${err.message}</td></tr>`;
   }
 }
 
@@ -840,6 +862,11 @@ function setupModals() {
 
   // Filter Listeners
   document.getElementById('agenda-date-filter')?.addEventListener('change', loadAgenda);
+  document.getElementById('agenda-clear-date-btn')?.addEventListener('click', () => {
+    const inp = document.getElementById('agenda-date-filter');
+    if (inp) inp.value = '';
+    loadAgenda();
+  });
   document.getElementById('agenda-staff-filter')?.addEventListener('change', loadAgenda);
   document.getElementById('agenda-status-filter')?.addEventListener('change', loadAgenda);
   document.getElementById('billing-date-filter')?.addEventListener('change', loadBillingReconciliation);

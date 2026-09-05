@@ -6,6 +6,7 @@
   <title>Admin Operations Portal (OMS) — Hannah Beauty Salon</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body style="visibility: hidden; opacity: 0; transition: opacity 0.2s ease-in;">
 
@@ -121,6 +122,7 @@
             <div class="filter-group">
               <label for="agenda-date-filter" class="form-label" style="margin: 0;">Date:</label>
               <input type="date" id="agenda-date-filter" class="form-control" style="width: auto;">
+              <button type="button" class="btn btn-secondary btn-sm" id="agenda-clear-date-btn" style="padding: 0.4rem 0.65rem; font-size: 0.8rem;" title="Show bookings from all dates">All Dates</button>
 
               <label for="agenda-staff-filter" class="form-label" style="margin: 0; margin-left: 0.5rem;">Stylist:</label>
               <select id="agenda-staff-filter" class="form-control" style="width: auto;">
