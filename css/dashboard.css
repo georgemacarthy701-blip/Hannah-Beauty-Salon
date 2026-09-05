@@ -420,17 +420,68 @@
   font-family: var(--font-serif);
 }
 
+/* Mobile Sidebar Toggle & Backdrop */
+.mobile-sidebar-toggle {
+  display: none;
+}
+
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+  opacity: 1;
+}
+
 /* Responsive Dashboard Breakpoints */
 @media (max-width: 992px) {
   .sidebar {
     position: fixed;
     top: 0;
     bottom: 0;
-    left: -260px;
+    left: -280px;
+    width: 280px;
+    height: 100vh;
+    z-index: 1000;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.25);
+    overflow-y: auto;
+    transition: left 0.3s ease;
   }
 
   .sidebar.open {
     left: 0;
+  }
+
+  .mobile-sidebar-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 0.35rem 0.65rem;
+    font-size: 1.35rem;
+    line-height: 1;
+    color: var(--dark);
+    cursor: pointer;
+    margin-right: 0.5rem;
+    transition: var(--transition);
+  }
+
+  .mobile-sidebar-toggle:hover {
+    background: var(--bg-subtle);
+    color: var(--primary);
   }
 
   .dashboard-content {
@@ -450,6 +501,8 @@
 
   .topbar-left {
     width: 100%;
+    display: flex;
+    align-items: center;
   }
 
   .topbar-title {

@@ -41,11 +41,36 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 /**
- * Tab Navigation Routing
+ * Tab Navigation Routing & Mobile Sidebar Drawer Controls
  */
 function setupNavigationTabs() {
   const navItems = document.querySelectorAll('.sidebar-nav-item');
   const tabContents = document.querySelectorAll('.tab-content');
+  const sidebar = document.getElementById('admin-sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  const toggleBtn = document.getElementById('mobile-sidebar-toggle');
+
+  function openSidebar() {
+    sidebar?.classList.add('open');
+    backdrop?.classList.add('active');
+    if (toggleBtn) toggleBtn.innerHTML = '<span class="hamburger-icon">✕</span>';
+  }
+
+  function closeSidebar() {
+    sidebar?.classList.remove('open');
+    backdrop?.classList.remove('active');
+    if (toggleBtn) toggleBtn.innerHTML = '<span class="hamburger-icon">☰</span>';
+  }
+
+  toggleBtn?.addEventListener('click', () => {
+    if (sidebar?.classList.contains('open')) {
+      closeSidebar();
+    } else {
+      openSidebar();
+    }
+  });
+
+  backdrop?.addEventListener('click', closeSidebar);
 
   navItems.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -61,6 +86,11 @@ function setupNavigationTabs() {
 
       const titleEl = document.getElementById('dashboard-view-title');
       if (titleEl) titleEl.textContent = btn.innerText.trim();
+
+      // Auto-close drawer on mobile when tab is selected
+      if (window.innerWidth <= 992) {
+        closeSidebar();
+      }
     });
   });
 }

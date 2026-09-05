@@ -11,6 +11,9 @@
 <body style="visibility: hidden; opacity: 0; transition: opacity 0.2s ease-in;">
 
   <div class="dashboard-layout">
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
     <!-- Sidebar -->
     <aside class="sidebar" id="admin-sidebar">
       <div class="sidebar-header">
@@ -62,6 +65,9 @@
       <!-- Topbar -->
       <header class="dashboard-topbar">
         <div class="topbar-left">
+          <button class="mobile-sidebar-toggle" id="mobile-sidebar-toggle" aria-label="Toggle navigation menu" type="button">
+            <span class="hamburger-icon">☰</span>
+          </button>
           <h2 class="topbar-title font-serif" id="dashboard-view-title">Daily Schedule & Agenda</h2>
         </div>
         <div class="topbar-actions">
