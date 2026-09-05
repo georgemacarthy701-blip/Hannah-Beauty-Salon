@@ -14,27 +14,29 @@
       align-items: center;
       justify-content: center;
       padding: 3rem 1.5rem;
-      background: linear-gradient(180deg, #faf8f5 0%, #f4ede5 100%);
+      background: radial-gradient(circle at 50% 30%, #22202A 0%, #121214 80%);
     }
 
     .auth-card {
-      background: #ffffff;
+      background: var(--bg-surface);
       border-radius: var(--radius-lg);
       border: 1px solid var(--border-subtle);
       width: 100%;
       max-width: 440px;
       padding: 2.5rem;
       box-shadow: var(--shadow-lg);
+      color: var(--text-primary);
     }
 
     .auth-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      padding: 0.3rem 0.75rem;
+      padding: 0.35rem 0.85rem;
       border-radius: var(--radius-full);
-      background-color: var(--accent-light);
-      color: var(--accent-dark);
+      background-color: rgba(197, 168, 128, 0.15);
+      color: var(--accent-gold);
+      border: 1px solid rgba(197, 168, 128, 0.3);
       font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
@@ -44,9 +46,9 @@
 
     .auth-error-banner {
       display: none;
-      background-color: #fef2f2;
-      border: 1px solid #fecaca;
-      color: #b91c1c;
+      background-color: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
       padding: 0.75rem 1rem;
       border-radius: var(--radius-sm);
       font-size: 0.875rem;

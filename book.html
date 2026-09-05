@@ -16,7 +16,7 @@
     }
 
     .booking-step-section {
-      background: #ffffff;
+      background: var(--bg-surface);
       border-radius: var(--radius-md);
       border: 1px solid var(--border-subtle);
       padding: 2rem;
@@ -31,8 +31,8 @@
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      background: var(--primary);
-      color: #fff;
+      background: var(--accent-gold);
+      color: #121214;
       font-weight: 700;
       font-size: 0.85rem;
       margin-right: 0.5rem;
@@ -53,9 +53,11 @@
     }
 
     .service-select-card {
+      background: var(--bg-surface);
       padding: 1.25rem;
       cursor: pointer;
       border: 2px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
       transition: var(--transition);
       display: flex;
       flex-direction: column;
@@ -63,13 +65,13 @@
     }
 
     .service-select-card:hover {
-      border-color: var(--accent);
+      border-color: var(--accent-gold);
       transform: translateY(-2px);
     }
 
     .service-select-card.selected {
-      border-color: var(--primary);
-      background-color: var(--primary-light);
+      border-color: var(--accent-gold);
+      background-color: rgba(197, 168, 128, 0.12);
     }
 
     .service-card-header {
@@ -82,18 +84,18 @@
     .service-name {
       font-size: 1.05rem;
       font-weight: 600;
-      color: var(--dark);
+      color: var(--text-primary);
     }
 
     .service-price {
       font-size: 1.15rem;
       font-weight: 700;
-      color: var(--primary);
+      color: var(--accent-gold);
     }
 
     .service-desc {
       font-size: 0.85rem;
-      color: var(--text-muted);
+      color: var(--text-secondary);
       margin-bottom: 0.75rem;
     }
 
@@ -106,7 +108,7 @@
 
     .select-indicator {
       font-weight: 600;
-      color: var(--primary);
+      color: var(--accent-gold);
       display: none;
     }
 
@@ -122,28 +124,30 @@
     }
 
     .stylist-select-card {
+      background: var(--bg-surface);
       padding: 1rem;
       cursor: pointer;
       border: 2px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
       text-align: center;
       transition: var(--transition);
     }
 
     .stylist-select-card:hover {
-      border-color: var(--accent);
+      border-color: var(--accent-gold);
     }
 
     .stylist-select-card.selected {
-      border-color: var(--primary);
-      background: var(--primary-light);
+      border-color: var(--accent-gold);
+      background: rgba(197, 168, 128, 0.12);
     }
 
     .stylist-avatar-box {
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: var(--accent-light);
-      color: var(--accent-dark);
+      background: rgba(197, 168, 128, 0.18);
+      color: var(--accent-gold);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -161,7 +165,7 @@
     }
 
     .slot-button {
-      background: #ffffff;
+      background: #1F1E24;
       border: 1.5px solid var(--border-subtle);
       border-radius: var(--radius-sm);
       padding: 0.65rem 0.5rem;
@@ -171,21 +175,24 @@
       align-items: center;
       justify-content: center;
       transition: var(--transition);
+      color: var(--text-primary);
     }
 
     .slot-button:hover {
-      border-color: var(--accent);
-      background: var(--bg-subtle);
+      border-color: var(--accent-gold);
+      background: #282630;
     }
 
     .slot-button.selected {
-      border-color: var(--primary);
-      background: var(--primary);
-      color: #ffffff;
+      border-color: var(--accent-gold);
+      background: var(--accent-gold);
+      color: #121214;
+      font-weight: 700;
     }
 
     .slot-button.selected .slot-duration {
-      color: rgba(255, 255, 255, 0.85);
+      color: #121214;
+      font-weight: 600;
     }
 
     .slot-time {
@@ -195,18 +202,19 @@
 
     .slot-duration {
       font-size: 0.75rem;
-      color: var(--text-muted);
+      color: var(--text-secondary);
     }
 
     /* Sticky Summary Sidebar */
     .summary-card {
       position: sticky;
       top: 90px;
-      background: #ffffff;
+      background: var(--bg-surface);
       border-radius: var(--radius-md);
       border: 1px solid var(--border-subtle);
       padding: 1.75rem;
       box-shadow: var(--shadow-md);
+      color: var(--text-primary);
     }
 
     .summary-row {

@@ -508,12 +508,12 @@ function showConfirmationModal(apt, name, email, phone) {
   if (modalBody) {
     modalBody.innerHTML = `
       <div style="text-align: center; margin-bottom: 1.5rem;">
-        <div style="width: 58px; height: 58px; border-radius: 50%; background: #ecfdf5; color: #047857; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin: 0 auto 0.75rem; font-weight: bold;">✓</div>
-        <h3 class="font-serif" style="font-size: 1.6rem; margin-bottom: 0.25rem;">Reservation Confirmed!</h3>
+        <div style="width: 58px; height: 58px; border-radius: 50%; background: rgba(16, 185, 129, 0.18); color: #34d399; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin: 0 auto 0.75rem; font-weight: bold; border: 1px solid rgba(16, 185, 129, 0.3);">✓</div>
+        <h3 class="font-serif" style="font-size: 1.6rem; margin-bottom: 0.25rem; color: var(--text-primary);">Reservation Confirmed!</h3>
         <p class="text-sm text-muted">Thank you for booking with Hannah Beauty Salon.</p>
-        <div style="background: var(--bg-subtle); padding: 0.75rem 1rem; border-radius: var(--radius-sm); margin-top: 1rem; border: 1.5px dashed var(--border-focus); display: inline-block; width: 100%;">
+        <div style="background: var(--bg-surface); padding: 0.75rem 1rem; border-radius: var(--radius-sm); margin-top: 1rem; border: 1.5px dashed var(--border-focus); display: inline-block; width: 100%;">
           <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); font-weight: 600;">Booking Reference ID</span>
-          <div style="font-family: monospace; font-size: 1.35rem; font-weight: 700; color: var(--primary); letter-spacing: 0.05em; margin-top: 0.15rem;">${refCode}</div>
+          <div style="font-family: monospace; font-size: 1.35rem; font-weight: 700; color: var(--accent-gold); letter-spacing: 0.05em; margin-top: 0.15rem;">${refCode}</div>
         </div>
       </div>
 
@@ -536,7 +536,7 @@ function showConfirmationModal(apt, name, email, phone) {
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span class="text-muted">Date & Time:</span>
-          <strong style="color: var(--primary);">${bookingState.selectedDate} at ${bookingState.selectedTime.substring(0, 5)}</strong>
+          <strong style="color: var(--accent-gold);">${bookingState.selectedDate} at ${bookingState.selectedTime.substring(0, 5)}</strong>
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span class="text-muted">Estimated Duration:</span>
@@ -544,12 +544,12 @@ function showConfirmationModal(apt, name, email, phone) {
         </div>
         <div style="display: flex; justify-content: space-between; border-top: 1px dashed var(--border-subtle); padding-top: 0.5rem; margin-top: 0.25rem;">
           <span class="text-muted font-semibold">Total Price:</span>
-          <strong style="color: var(--primary); font-size: 1.15rem; font-family: var(--font-serif);">${formatCurrency(bookingState.selectedService.price)}</strong>
+          <strong style="color: var(--accent-gold); font-size: 1.15rem; font-family: var(--font-serif);">${formatCurrency(bookingState.selectedService.price)}</strong>
         </div>
       </div>
 
       <!-- Arrival Advice Notice -->
-      <div style="background: #fff8e6; border: 1px solid #fde68a; border-radius: var(--radius-sm); padding: 0.75rem 1rem; margin-top: 1.25rem; font-size: 0.825rem; color: #92400e; display: flex; align-items: center; gap: 0.5rem;">
+      <div style="background: rgba(197, 168, 128, 0.12); border: 1px solid rgba(197, 168, 128, 0.3); border-radius: var(--radius-sm); padding: 0.75rem 1rem; margin-top: 1.25rem; font-size: 0.825rem; color: var(--accent-gold); display: flex; align-items: center; gap: 0.5rem;">
         <span>ℹ️</span>
         <span><strong>Important:</strong> Please arrive 10 minutes prior to your scheduled time.</span>
       </div>
