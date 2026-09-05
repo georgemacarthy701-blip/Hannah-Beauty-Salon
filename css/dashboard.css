@@ -437,3 +437,68 @@
     padding: 1.25rem;
   }
 }
+
+@media (max-width: 768px) {
+  .dashboard-topbar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    position: static;
+  }
+
+  .topbar-left {
+    width: 100%;
+  }
+
+  .topbar-title {
+    font-size: 1.25rem;
+    line-height: 1.3;
+  }
+
+  .topbar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .topbar-actions .btn,
+  .topbar-actions a.btn {
+    flex: 1 1 auto;
+    text-align: center;
+    justify-content: center;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .metric-card {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .toolbar-card {
+    padding: 1rem;
+  }
+
+  .toolbar-card .filter-group {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+    width: 100%;
+  }
+
+  .toolbar-card .filter-group select,
+  .toolbar-card .filter-group input {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+}
