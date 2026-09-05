@@ -3,9 +3,16 @@
    Admin Dashboard & Staff Portal Layouts, Data Tables & Controls
    ========================================================================== */
 
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
 .dashboard-layout {
   display: flex;
   min-height: 100vh;
+  max-width: 100vw;
+  overflow-x: hidden;
   background-color: #f7f5f2;
 }
 
@@ -262,21 +269,38 @@
   flex-wrap: wrap;
 }
 
-/* Data Tables */
+/* Responsive Data Tables */
+.table-responsive,
 .table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   background: #ffffff;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-subtle);
-  overflow: hidden;
   box-shadow: var(--shadow-sm);
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
-.data-table {
+.table-responsive table,
+.table-responsive .data-table,
+.table-container table,
+.table-container .data-table {
   width: 100%;
+  min-width: 650px; /* Ensures columns have breathing room and don't collapse */
   border-collapse: collapse;
   text-align: left;
   font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+/* Allow multi-line descriptions and details inside the first column */
+.table-responsive td:first-child,
+.table-responsive th:first-child,
+.table-container td:first-child,
+.table-container th:first-child {
+  white-space: normal;
+  min-width: 180px;
 }
 
 .data-table th {
