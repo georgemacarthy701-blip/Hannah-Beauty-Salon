@@ -173,12 +173,27 @@
       const name = (srv.name || '').toLowerCase();
       const cat = (srv.category || '').toLowerCase();
 
+      // Keratin Straightening Therapy
+      if (name.includes('keratin') || name.includes('straight') || name.includes('silk press') || name.includes('hydra-gloss')) {
+        return { src: 'images/keratin-hair.jpg', alt: 'Black woman with sleek silk press hair treatment' };
+      }
+      // Luxury Gel Manicure
+      if (name.includes('manicure') || (name.includes('gel') && !name.includes('pedicure')) || (cat.includes('nail') && name.includes('mani'))) {
+        return { src: 'images/luxury-manicure.jpg', alt: 'Elegant manicured gel nails on dark melanin hands' };
+      }
+      // Deluxe Pedicure & Foot Scrub
+      if (name.includes('pedicure') || name.includes('foot') || name.includes('feet')) {
+        return { src: 'images/pedicure-spa.jpg', alt: 'Deluxe Pedicure & Foot Scrub Treatment at Hannah Beauty Salon' };
+      }
+      // Radiance Renewal Facial / Skincare
+      if (name.includes('facial') || name.includes('skin') || name.includes('peel') || cat.includes('skin') || cat.includes('facial')) {
+        return { src: 'images/facial-treatment.jpg', alt: 'Rejuvenating facial skin therapy at Hannah Beauty Salon' };
+      }
+      // Bridal Glam Makeup & Lashes
       if (name.includes('bridal') || name.includes('makeup') || name.includes('lash') || cat.includes('makeup') || cat.includes('bridal')) {
         return { src: 'images/bridal-makeup.jpg', alt: 'Bridal Glam Makeup & Lashes at Hannah Beauty Salon' };
       }
-      if (name.includes('pedicure') || name.includes('nail') || name.includes('manicure') || name.includes('spa') || name.includes('foot') || cat.includes('nail')) {
-        return { src: 'images/pedicure-spa.jpg', alt: 'Deluxe Pedicure & Foot Scrub Treatment at Hannah Beauty Salon' };
-      }
+      // Hair Braiding / Styling
       if (name.includes('braid') || name.includes('hair') || name.includes('wash') || name.includes('twist') || name.includes('styling') || cat.includes('hair')) {
         return { src: 'images/hair-styling.jpg', alt: 'Hair Braiding & Bespoke Styling at Hannah Beauty Salon' };
       }
