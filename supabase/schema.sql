@@ -379,7 +379,7 @@ VALUES
     ('Executive Haircut & Styling', 'Hair', 'Precision cut, wash, scalp massage, and custom styling finish.', 45, 35.00, true, 'images/hair-styling.jpg'),
     ('Hydra-Gloss Hair Treatment & Blowdry', 'Hair Treatments', 'Deep conditioning keratin repair treatment for silky, revitalized hair.', 60, 65.00, true, 'images/keratin-hair.jpg'),
     ('Signature Balayage & Toning', 'Hair Coloring', 'Hand-painted dimensional highlights with custom gloss toning.', 120, 140.00, true, 'images/hair-styling.jpg'),
-    ('Luxury Gel Manicure & Hand Spa', 'Nails', 'Cuticle treatment, organic exfoliation, and chip-free gel polish application.', 45, 40.00, true, 'images/luxury-manicure.jpg'),
+    ('Luxury Gel Manicure & Hand Spa', 'Nails', 'Cuticle treatment, organic exfoliation, and chip-free gel polish application.', 45, 40.00, true, 'images/luxury-gel-nails.jpg'),
     ('Deluxe Pedicure & Foot Scrub', 'Nails', 'Aromatherapy foot soak, callus buffing, massage, and polish.', 50, 45.00, true, 'images/pedicure-spa.jpg'),
     ('Radiance Renewal Facial', 'Skincare', 'Deep pore cleansing, enzyme peel, lymphatic facial massage, and LED therapy.', 60, 75.00, true, 'images/facial-treatment.jpg'),
     ('Bridal Glam Makeup & Lashes', 'Makeup', 'High-definition long-lasting bridal makeup with mink lash application.', 90, 110.00, true, 'images/bridal-makeup.jpg'),

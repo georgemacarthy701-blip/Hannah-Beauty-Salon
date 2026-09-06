@@ -182,9 +182,9 @@
       if (name.includes('keratin') || name.includes('straight') || name.includes('silk press') || name.includes('hydra-gloss')) {
         return { src: 'images/keratin-hair.jpg', alt: 'Black woman with sleek silk press hair treatment' };
       }
-      // Luxury Gel Manicure
-      if (name.includes('manicure') || (name.includes('gel') && !name.includes('pedicure')) || (cat.includes('nail') && name.includes('mani'))) {
-        return { src: 'images/luxury-manicure.jpg', alt: 'Elegant manicured gel nails on dark melanin hands' };
+      // Luxury Gel Manicure & Nail Spa
+      if (name.includes('manicure') || (name.includes('gel') && !name.includes('pedicure')) || (cat.includes('nail') && name.includes('mani')) || (cat.includes('nail') && !name.includes('pedicure'))) {
+        return { src: 'images/luxury-gel-nails.jpg', alt: 'Luxury floral acrylic nail art on dark melanin hands' };
       }
       // Deluxe Pedicure & Foot Scrub
       if (name.includes('pedicure') || name.includes('foot') || name.includes('feet')) {
