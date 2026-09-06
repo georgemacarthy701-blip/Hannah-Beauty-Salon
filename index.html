@@ -178,9 +178,9 @@
       const name = (srv.name || '').toLowerCase();
       const cat = (srv.category || '').toLowerCase();
 
-      // Keratin Straightening Therapy
-      if (name.includes('keratin') || name.includes('straight') || name.includes('silk press') || name.includes('hydra-gloss')) {
-        return { src: 'images/keratin-hair.jpg', alt: 'Black woman with sleek silk press hair treatment' };
+      // Keratin Straightening Therapy & Hair Treatments
+      if (name.includes('keratin') || name.includes('straight') || name.includes('silk press') || name.includes('hydra-gloss') || cat.includes('treatment')) {
+        return { src: 'images/keratin-hair.jpg', alt: 'Keratin and botanical oil nourishing hair therapy treatment' };
       }
       // Luxury Gel Manicure & Nail Spa
       if (name.includes('manicure') || (name.includes('gel') && !name.includes('pedicure')) || (cat.includes('nail') && name.includes('mani')) || (cat.includes('nail') && !name.includes('pedicure'))) {
