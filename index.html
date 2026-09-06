@@ -198,7 +198,11 @@
       if (name.includes('bridal') || name.includes('makeup') || name.includes('lash') || cat.includes('makeup') || cat.includes('bridal')) {
         return { src: 'images/bridal-makeup.jpg', alt: 'Bridal Glam Makeup & Lashes at Hannah Beauty Salon' };
       }
-      // Hair Braiding / Styling
+      // Executive Haircut & Styling
+      if (name.includes('executive') || name.includes('haircut') || name.includes('cut')) {
+        return { src: 'images/executive-haircut.jpg', alt: 'Precision executive haircut and tapered curl styling finish' };
+      }
+      // Hair Braiding / Styling / Other Hair
       if (name.includes('braid') || name.includes('hair') || name.includes('wash') || name.includes('twist') || name.includes('styling') || cat.includes('hair')) {
         return { src: 'images/hair-styling.jpg', alt: 'Hair Braiding & Bespoke Styling at Hannah Beauty Salon' };
       }

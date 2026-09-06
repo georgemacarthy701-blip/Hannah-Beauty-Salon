@@ -376,7 +376,7 @@ CREATE POLICY "Admins full manage transactions"
 -- 6.1 Services Seed
 INSERT INTO public.services (name, category, description, duration_minutes, price, is_active, image_url)
 VALUES
-    ('Executive Haircut & Styling', 'Hair', 'Precision cut, wash, scalp massage, and custom styling finish.', 45, 35.00, true, 'images/hair-styling.jpg'),
+    ('Executive Haircut & Styling', 'Hair', 'Precision cut, wash, scalp massage, and custom styling finish.', 45, 35.00, true, 'images/executive-haircut.jpg'),
     ('Hydra-Gloss Hair Treatment & Blowdry', 'Hair Treatments', 'Deep conditioning keratin repair treatment for silky, revitalized hair.', 60, 65.00, true, 'images/keratin-hair.jpg'),
     ('Signature Balayage & Toning', 'Hair Coloring', 'Hand-painted dimensional highlights with custom gloss toning.', 120, 140.00, true, 'images/hair-styling.jpg'),
     ('Luxury Gel Manicure & Hand Spa', 'Nails', 'Cuticle treatment, organic exfoliation, and chip-free gel polish application.', 45, 40.00, true, 'images/luxury-gel-nails.jpg'),
