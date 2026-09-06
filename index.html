@@ -170,6 +170,11 @@
     import './js/auth.js';
 
     function getServiceImage(srv) {
+      if (srv.image_url && typeof srv.image_url === 'string' && srv.image_url.trim() !== '') {
+        const altText = srv.name ? `${srv.name} treatment at Hannah Beauty Salon` : 'Hannah Beauty Salon Treatment';
+        return { src: srv.image_url, alt: altText };
+      }
+
       const name = (srv.name || '').toLowerCase();
       const cat = (srv.category || '').toLowerCase();
 

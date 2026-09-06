@@ -374,16 +374,16 @@ CREATE POLICY "Admins full manage transactions"
 -- 6. INITIAL SEED DATA FOR TESTING & DEMONSTRATION
 
 -- 6.1 Services Seed
-INSERT INTO public.services (name, category, description, duration_minutes, price, is_active)
+INSERT INTO public.services (name, category, description, duration_minutes, price, is_active, image_url)
 VALUES
-    ('Executive Haircut & Styling', 'Hair', 'Precision cut, wash, scalp massage, and custom styling finish.', 45, 35.00, true),
-    ('Hydra-Gloss Hair Treatment & Blowdry', 'Hair Treatments', 'Deep conditioning keratin repair treatment for silky, revitalized hair.', 60, 65.00, true),
-    ('Signature Balayage & Toning', 'Hair Coloring', 'Hand-painted dimensional highlights with custom gloss toning.', 120, 140.00, true),
-    ('Luxury Gel Manicure & Hand Spa', 'Nails', 'Cuticle treatment, organic exfoliation, and chip-free gel polish application.', 45, 40.00, true),
-    ('Deluxe Pedicure & Foot Scrub', 'Nails', 'Aromatherapy foot soak, callus buffing, massage, and polish.', 50, 45.00, true),
-    ('Radiance Renewal Facial', 'Skincare', 'Deep pore cleansing, enzyme peel, lymphatic facial massage, and LED therapy.', 60, 75.00, true),
-    ('Bridal Glam Makeup & Lashes', 'Makeup', 'High-definition long-lasting bridal makeup with mink lash application.', 90, 110.00, true),
-    ('Keratin Straightening Therapy', 'Hair Treatments', 'Formaldehyde-free smoothing system reducing frizz for up to 4 months.', 150, 180.00, true)
+    ('Executive Haircut & Styling', 'Hair', 'Precision cut, wash, scalp massage, and custom styling finish.', 45, 35.00, true, 'images/hair-styling.jpg'),
+    ('Hydra-Gloss Hair Treatment & Blowdry', 'Hair Treatments', 'Deep conditioning keratin repair treatment for silky, revitalized hair.', 60, 65.00, true, 'images/keratin-hair.jpg'),
+    ('Signature Balayage & Toning', 'Hair Coloring', 'Hand-painted dimensional highlights with custom gloss toning.', 120, 140.00, true, 'images/hair-styling.jpg'),
+    ('Luxury Gel Manicure & Hand Spa', 'Nails', 'Cuticle treatment, organic exfoliation, and chip-free gel polish application.', 45, 40.00, true, 'images/luxury-manicure.jpg'),
+    ('Deluxe Pedicure & Foot Scrub', 'Nails', 'Aromatherapy foot soak, callus buffing, massage, and polish.', 50, 45.00, true, 'images/pedicure-spa.jpg'),
+    ('Radiance Renewal Facial', 'Skincare', 'Deep pore cleansing, enzyme peel, lymphatic facial massage, and LED therapy.', 60, 75.00, true, 'images/facial-treatment.jpg'),
+    ('Bridal Glam Makeup & Lashes', 'Makeup', 'High-definition long-lasting bridal makeup with mink lash application.', 90, 110.00, true, 'images/bridal-makeup.jpg'),
+    ('Keratin Straightening Therapy', 'Hair Treatments', 'Formaldehyde-free smoothing system reducing frizz for up to 4 months.', 150, 180.00, true, 'images/keratin-hair.jpg')
 ON CONFLICT DO NOTHING;
 
 -- 6.2 Staff Seed
